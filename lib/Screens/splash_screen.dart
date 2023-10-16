@@ -4,7 +4,7 @@ import 'package:colorful_progress_indicators/colorful_progress_indicators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:islamm786/Screens/splash_screen_2.dart';
+
 import 'package:lamsz_quran_api/api/quran_api.dart';
 import 'package:show_up_animation/show_up_animation.dart';
 import '../AppPrefs.dart';
@@ -27,7 +27,6 @@ var val=false;
   void initState() {
 
     super.initState();
-    
 
   }
   @override
@@ -48,19 +47,20 @@ var val=false;
       body: Container(
         width: width,
         height: height,
-        child: Stack(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                    "assets/check.png"
+                ),
+                fit: BoxFit.cover
+            )
+        ),
+        // alignment: Alignment.topCenter,
+        // child: SvgPicture.asset("assets/background.svg", fit: BoxFit.fill,),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-
-            Container(
-              width: width,
-              height: height,
-
-              alignment: Alignment.topCenter,
-              child: SvgPicture.asset("assets/background.svg", fit: BoxFit.fill,),
-            ),
-            Positioned(
-              top: 270,
-              left: 135,
+            Center(
               child: ShowUpAnimation(
                 delayStart: Duration(microseconds: 400),
                 animationDuration: Duration(seconds: 2),
@@ -77,13 +77,10 @@ var val=false;
                 ),
               ),
             ),
-
-             Column(
+             SizedBox(height: MediaQuery.of(context).size.height*.6,),
+            Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-
-
-                const SizedBox(height: 35,),
 
                 ShowUpAnimation(
                   delayStart: Duration(microseconds: 400),
@@ -106,41 +103,31 @@ var val=false;
                 //     size: 40.0,
                 //   ),
                 // ),
-       ShowUpAnimation(
-         delayStart: Duration(microseconds: 400),
-         animationDuration: Duration(seconds: 1),
-         child: Padding(
-           padding: const EdgeInsets.only(left:130.0,right: 130),
-           child: ColorfulLinearProgressIndicator(
-             minHeight: 1.5,
-            colors: [
-              Colors.purpleAccent.shade200,
-              Colors.purple.shade50,
-              Colors.purple,
-              Colors.purple.shade100,
-              Colors.brown,
-            ],
-            duration:Duration(seconds: 2),
-            initialColor: Colors.orange,
-      ),
-         ),
-       ),
+                ShowUpAnimation(
+                  delayStart: Duration(microseconds: 400),
+                  animationDuration: Duration(seconds: 1),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left:130.0,right: 130),
+                    child: ColorfulLinearProgressIndicator(
+                      minHeight: 1.5,
+                      colors: [
+                        Colors.purpleAccent.shade200,
+                        Colors.purple.shade50,
+                        Colors.purple,
+                        Colors.purple.shade100,
+                        Colors.brown,
+                      ],
+                      duration:Duration(seconds: 2),
+                      initialColor: Colors.orange,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 25,),
               ],
             ),
-            // Positioned(
-            //   bottom: 80.0,
-            //   child: Container(
-            //     width: width,
-            //     child: SpinKitRing(
-            //       color: Colors.black,
-            //       size: 50.0,
-            //       lineWidth: 1.5,
-            //     ),
-            //   ),
-            // ),
           ],
         ),
+
       ),
     );
   }

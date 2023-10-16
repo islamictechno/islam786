@@ -24,6 +24,8 @@ class GradientColors {
   static List<Color> sea = [Color(0xFF61A3FE), Color(0xFF63FFD5)];
   static List<Color> mango = [Color(0xFFFFA738), Color(0xFFFFE130)];
   static List<Color> fire = [Color(0xFFFF5DCD), Color(0xFFFF8484)];
+  static List<Color> skyB = [Color(0xFF6448FE), Color(0xFF5FC6FF)];
+  static List<Color> mangob = [Color(0xFFFFA738), Color(0xFFFFE130)];
 }
 
 class GradientTemplate {
@@ -33,5 +35,7 @@ class GradientTemplate {
     GradientColors(GradientColors.sea),
     GradientColors(GradientColors.mango),
     GradientColors(GradientColors.fire),
+    GradientColors(GradientColors.skyB),
+    GradientColors(GradientColors.mangob),
   ];
 }

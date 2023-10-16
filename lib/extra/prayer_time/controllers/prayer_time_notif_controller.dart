@@ -63,7 +63,7 @@ class PrayerTimeNotifController extends GetxController {
 
     AwesomeNotify.createBasicNotif(
       id: uniqueId,
-      title: "Prayer Times",
+      //title: "Namaz Time",
       body: "${prayerTime.capitalize} prayer time has arrived 🤩",
     ).then((value) {
       if (!value) {
@@ -101,6 +101,7 @@ class PrayerTimeNotifController extends GetxController {
             title: "Allow Notifications",
             message: "Our app would like to send you notifications.",
             onPressed: () {
+
               AwesomeNotifications()
                   .requestPermissionToSendNotifications()
                   .then(
@@ -154,7 +155,9 @@ class PrayerTimeNotifController extends GetxController {
     enableIsha.value = readBox(key: 'isha_notif');
     enableQiyam.value = readBox(key: 'qiyam_notif');
 
-    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    AwesomeNotifications().isNotificationAllowed(
+
+    ).then((isAllowed) {
       if (!isAllowed) {
         Get.bottomSheet(
           AppPermissionStatus(
@@ -163,7 +166,10 @@ class PrayerTimeNotifController extends GetxController {
             message: "Our app would like to send you notifications.",
             onPressed: () {
               AwesomeNotifications()
-                  .requestPermissionToSendNotifications()
+                  .requestPermissionToSendNotifications(
+                  channelKey: "Islam786",
+
+              )
                   .then(
                     (value) => Get.back(),
                   );

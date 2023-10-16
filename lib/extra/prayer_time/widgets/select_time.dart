@@ -26,12 +26,12 @@ class SelectTime extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             "Set Prayer \nTime Reminder",
 
           ),
           const SizedBox(height: 10),
-          Text(
+          const Text(
             "Reminder notification will appear.",
 
           ),

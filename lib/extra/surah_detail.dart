@@ -11,7 +11,7 @@ import 'models/translation.dart';
 
 
 
-enum Translation { hindi,english, spanish }
+enum Translation { hindi,english, spanish, }
 
 class Surahdetail extends StatefulWidget {
   const Surahdetail({Key? key}) : super(key: key);
@@ -59,68 +59,69 @@ class _SurahdetailState extends State<Surahdetail> {
           },
         ),
       ),
-      bottomSheet: SolidBottomSheet(
-        toggleVisibilityOnTap: true,
-        headerBar: Container(
-          color: arabicColor,
-          height: 50,
-          child: const Center(
-            child: Text("Swipe me!",style: TextStyle(color: Colors.white),),
-          ),
-        ),
-        body: Container(
-          color: Colors.white,
-          height: 350,
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: <Widget>[
-
-                  ListTile(
-                    title: const Text('Hindi'),
-                    leading: Radio<Translation>(
-                      activeColor: arabicColor,
-                      value: Translation.hindi,
-                      groupValue: _translation,
-                      onChanged: (Translation? value) {
-                        setState(() {
-                          _translation = value;
-                        });
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    title: const Text('English'),
-                    leading: Radio<Translation>(
-                      activeColor: arabicColor,
-                      value: Translation.english,
-                      groupValue: _translation,
-                      onChanged: (Translation? value) {
-                        setState(() {
-                          _translation = value;
-                        });
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    title: const Text('Spanish'),
-                    leading: Radio<Translation>(
-                      activeColor: arabicColor,
-                      value: Translation.spanish,
-                      groupValue: _translation,
-                      onChanged: (Translation? value) {
-                        setState(() {
-                          _translation = value;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              )
-            ),
-          ),
-        ),
-      ),
+      // bottomSheet: SolidBottomSheet(
+      //   toggleVisibilityOnTap: true,
+      //   headerBar: Container(
+      //     color: arabicColor,
+      //     height: 50,
+      //     child: const Center(
+      //       child: Text("Swipe me!",style: TextStyle(color: Colors.white),),
+      //     ),
+      //   ),
+      //   body: Container(
+      //     color: Colors.white,
+      //     height: 350,
+      //     child: SingleChildScrollView(
+      //       child: Center(
+      //         child: Column(
+      //           children: <Widget>[
+      //
+      //             ListTile(
+      //               title: const Text('Hindi'),
+      //               leading: Radio<Translation>(
+      //                 activeColor: arabicColor,
+      //                 value: Translation.hindi,
+      //                 groupValue: _translation,
+      //                 onChanged: (Translation? value) {
+      //                   setState(() {
+      //                     _translation = value;
+      //                   });
+      //                 },
+      //               ),
+      //             ),
+      //             ListTile(
+      //               title: const Text('English'),
+      //               leading: Radio<Translation>(
+      //                 activeColor: arabicColor,
+      //                 value: Translation.english,
+      //                 groupValue: _translation,
+      //                 onChanged: (Translation? value) {
+      //                   setState(() {
+      //                     _translation = value;
+      //                   });
+      //                 },
+      //               ),
+      //             ),
+      //             ListTile(
+      //               title: const Text('Spanish'),
+      //               leading: Radio<Translation>(
+      //                 activeColor: arabicColor,
+      //                 value: Translation.spanish,
+      //                 groupValue: _translation,
+      //                 onChanged: (Translation? value) {
+      //                   setState(() {
+      //                     _translation = value;
+      //                   });
+      //                 },
+      //               ),
+      //             ),
+      //
+      //           ],
+      //         )
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

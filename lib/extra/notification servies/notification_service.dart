@@ -47,10 +47,10 @@ class AwesomeNotify {
     if (isAllowed) {
       var illPray = AssetsName.illMuslimPray;
 
-      dateTime =
-          dateTime.subtract(Duration(hours: hour ?? 0, seconds: minute ?? 0));
-
-      log("DateTime After : " + dateTime.toString());
+      // dateTime =
+      //     dateTime.subtract(Duration(hours: hour ?? 0, seconds: minute ?? 0));
+      //
+      // log("DateTime After : " + dateTime.toString());
 
       return await AwesomeNotifications().createNotification(
         content: NotificationContent(

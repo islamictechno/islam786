@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'AppPrefs.dart';
 import 'Screens/bottom_bar.dart';
 import 'Screens/splash_screen.dart';
-import 'Screens/splash_screen_2.dart';
+
 import 'extra/audio_surah2/frontend/providers/app_provider.dart';
 import 'extra/audio_surah2/frontend/providers/chapter_list_provider.dart';
 import 'extra/audio_surah2/utils/route.dart';
@@ -91,9 +91,11 @@ class MyApp extends StatelessWidget {
     AppPrefs.setPhoneNumber('false');
 
     return GetMaterialApp(
+
       onGenerateRoute: (settings) => RouteGenerator.onGenerateRoute(settings),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+
         primarySwatch: Colors.blue,
       ),
 
@@ -104,7 +106,7 @@ class MyApp extends StatelessWidget {
       },
       getPages: [
         // Get.to(()=>LogoScreen());
-        GetPage(name: '/splashScreen', page: () => SplashScreen()),
+        GetPage(name: '/splash_screen', page: () => SplashScreen()),
 
 
 

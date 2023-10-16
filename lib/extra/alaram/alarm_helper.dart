@@ -57,7 +57,9 @@ class AlarmHelper {
   }
 
   Future<List<AlarmInfo>> getAlarms() async {
-    List<AlarmInfo> _alarms = [];
+    List<AlarmInfo> _alarms = [
+
+    ];
 
     var db = await this.database;
     var result = await db.query(tableAlarm);

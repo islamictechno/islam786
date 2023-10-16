@@ -30,53 +30,55 @@ class AppPermissionStatus extends StatelessWidget {
         ),
 
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(25),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(100),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Icon(
+                icon,
+                size: 90,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
-            child: Icon(
-              icon,
-              size: 90,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            title,
-
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 6),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              message,
+            const SizedBox(height: 20),
+            Text(
+              title,
 
               textAlign: TextAlign.center,
             ),
-          ),
-          // const Spacer(),
-          const SizedBox(height: 20),
-          MyButton(
-            text: "Allow",
-            width: MediaQuery.of(context).size.width,
-            onPressed: onPressed,
-          ),
-          const SizedBox(height: 10),
-          MyOutlinedButton(
-            text: "Don't Allow",
-            width: MediaQuery.of(context).size.width,
-            onPressed: () {
-              Get.back();
-            },
-          ),
-          const SizedBox(height: 20),
-        ],
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                message,
+
+                textAlign: TextAlign.center,
+              ),
+            ),
+            // const Spacer(),
+            const SizedBox(height: 20),
+            MyButton(
+              text: "Allow",
+              width: MediaQuery.of(context).size.width,
+              onPressed: onPressed,
+            ),
+            const SizedBox(height: 10),
+            MyOutlinedButton(
+              text: "Don't Allow",
+              width: MediaQuery.of(context).size.width,
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }

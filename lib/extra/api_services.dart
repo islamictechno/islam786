@@ -77,9 +77,7 @@ class ApiServices{
       throw Exception("Failed  to Load Post");
     }
   }
-
   Future<SurahTranslationList> getTranslation(int index , int translationIndex) async{
-
     String lan = "";
      if(translationIndex == 0){
       lan = "hindi_omari";
@@ -88,24 +86,18 @@ class ApiServices{
     }else if(translationIndex == 2){
       lan = "spanish_garcia";
     }
-
     final url = "https://quranenc.com/api/translation/sura/$lan/$index";
     var res = await http.get(Uri.parse(url));
-
     return SurahTranslationList.fromJson(json.decode(res.body));
   }
-
-
   List<Qari> qarilist = [];
-
   Future<List<Qari>> getQariList() async {
-
     final url = "https://quranicaudio.com/api/qaris";
     final res = await http.get(Uri.parse(url));
-
     jsonDecode(res.body).forEach((element){
-      if(qarilist.length<100) // 20 is not mandatory , you can change it upto 157
+      if(qarilist.length<25){// 20 is not mandatory , you can change it upto 157
         qarilist.add(Qari.fromjson(element));
+      }
     });
     qarilist.sort((a,b)=>a.name!.compareTo(b.name!)); // sort according to A B C
     return qarilist;

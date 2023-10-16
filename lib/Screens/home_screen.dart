@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 
@@ -18,9 +19,11 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import 'package:hijri/hijri_calendar.dart';
+
 import 'package:intl/intl.dart';
 import 'package:islamm786/Constants.dart';
 import 'package:islamm786/Models/aya_model.dart';
+import 'package:islamm786/Screens/NotePad/note_pad.dart';
 import 'package:islamm786/Screens/allah_name.dart';
 import 'package:islamm786/Screens/developerinfo.dart';
 
@@ -31,18 +34,18 @@ import 'package:islamm786/Services/api_service.dart';
 import 'package:islamm786/Services/nameofDay.dart';
 import 'package:islamm786/Services/text.dart';
 import 'package:islamm786/app_utils/common.dart';
+import 'package:islamm786/app_utils/text_utils.dart';
 import 'package:islamm786/drawer_screen/about_us.dart';
-
 import 'package:islamm786/extra/prayer_time/views/prayer_time_page.dart';
+import 'package:jhijri_picker/jhijri_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
-
 import 'package:url_launcher/url_launcher.dart';
-
+import '../Dua/home_dua.dart';
 import '../Services/AdHelper.dart';
 import '../extra/prayer_time/controllers/prayer_time_controller.dart';
-
+import '../prayer_time_notification/prayer_Notification.dart';
 import '../qibla/qibla.dart';
 import 'dua_screen.dart';
 
@@ -157,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
     await apiService.getAya().then((value) => data = value);
     loader = false;
     setState(() {
-
     });
   }
 
@@ -199,16 +201,41 @@ class _HomeScreenState extends State<HomeScreen> {
     print(image);
     return image;
   }
-
+TextUtils _textUtils= TextUtils();
 
 // generate a random index based on the list length
 // and use it to retrieve the element
 
   GlobalKey<ScaffoldState>_globalKey = GlobalKey<ScaffoldState>();
 
+  void _showDatePicker(context) {
+    showDatePicker(
+        builder: (context,  child) {
+      return Theme(
+        data: ThemeData.dark().copyWith(
+          colorScheme: const ColorScheme.dark(
+            primary: Colors.deepPurple,
+            onPrimary: Colors.white,
+            surface: Colors.deepPurple,
+            onSurface: Colors.black87,
+          ),
+          dialogBackgroundColor:Colors.white,
+        ),
+        child: child!,
+      );
+    },
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime(2050));
+  }
+
+  JDateModel dM = JDateModel(dateTime: DateTime.now());
+
 
   @override
   Widget build(BuildContext context) {
+
     var displayWidth = MediaQuery
         .of(context)
         .size
@@ -226,227 +253,88 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       drawer: Drawer(
-        width: 250,
+        width: 200,
 
-        child: Column(
-          children: [
-            Container(
-                height: 200,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(getImage())
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                  height: 200,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(getImage())
 
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/islam786.png', height: 70,),
-                  ],
-                )
-            ),
-            Container(
-                height: 600,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                decoration:  const BoxDecoration(
-
-                  image: DecorationImage(
-                    opacity: 0.25,
-                    // colorFilter:
-                    // ColorFilter.mode(Colors.white.withOpacity(0.2),
-                    //     BlendMode.dstATop),
-                    image: AssetImage(
-                      "assets/check.png",
                     ),
-                    fit: BoxFit.cover,
                   ),
-                ),
-                child: SingleChildScrollView(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 14,),
-                      drawer((){
-                        Get.to(()=>AboutUsScreen());
-                      }, Icons.privacy_tip_outlined, "About us"),
-                      // const SizedBox(height: 9,),
-                      // drawer((){}, Icons.person, "Contact Us"),
-                      const SizedBox(height: 9,),
-                      drawer((){}, Icons.settings, "Setting"),
-                      const SizedBox(height: 9,),
-                      drawer((){}, Icons.card_membership, "Award"),
-                      const SizedBox(height: 9,),
-                      drawer((){}, Icons.feedback, "Feedback"),
-                      const SizedBox(height: 9,),
-                      drawer((){
-                        _launchURLPrivacy();
-                      }, Icons.privacy_tip, "Privacy Polcy"),
-                      const SizedBox(height: 9,),
-                      drawer((){
-                        rateusUrl();
-                      }, Icons.star_rate_rounded, "Rate Us"),
-                      const SizedBox(height: 9,),
-                      drawer((){
-                        sharePress();
-                      }
-
-                          , Icons.share, "Share Islam786"),
-                      const SizedBox(height: 10,),
-                      //
-                      // // const SizedBox(
-                      // //   height:30,
-                      // //   child: ListTile(
-                      // //     minVerticalPadding: -10,
-                      // //     leading: Icon(Icons.privacy_tip_outlined, color: arabicColor,),
-                      // //     title: Text('About us',
-                      // //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300,)),
-                      // //   ),
-                      // // ),
-                      // SizedBox(height: 7,),
-                      // const Divider(),
-                      // const SizedBox(height: 9,),
-                      // Row(
-                      //
-                      //   children: [
-                      //
-                      //     Expanded(
-                      //         flex:2,
-                      //         child: Icon(Icons.person, color: arabicColor,)),
-                      //     Expanded(
-                      //       flex: 8,
-                      //       child: Text('Contact Us',
-                      //           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300,)),
-                      //     ),
-                      //   ],
-                      // ),
-                      // //  Container(
-                      // //   height:20,
-                      // //   child: ListTile(
-                      // //     minVerticalPadding: 0,
-                      // //     leading: Icon(Icons.person, color: arabicColor,),
-                      // //     title: Text('Contact Us',
-                      // //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300,)),
-                      // //   ),
-                      // // ),
-                      // SizedBox(height: 7,),
-                      // const Divider(),
-                      // const SizedBox(height: 9,),
-                      // Row(
-                      //   children: [
-                      //     Expanded(
-                      //         flex:2,
-                      //         child: Icon(Icons.person, color: arabicColor,)),
-                      //     Expanded(
-                      //       flex: 8,
-                      //       child: Text('Contact Us',
-                      //           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300,)),
-                      //     ),
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height:25,
-                      //   child: ListTile(
-                      //     minVerticalPadding: 0,
-                      //     leading: Icon(Icons.settings, color: arabicColor,),
-                      //     title: Text('Setting',
-                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300,)),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 20,),
-                      // const Divider(),
-                      //
-                      // SizedBox(
-                      //   height:25,
-                      //   child: ListTile(
-                      //     minVerticalPadding: 0,
-                      //     leading: Icon(Icons.card_membership, color: arabicColor,),
-                      //     title: Text('Award',
-                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300,)),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 20,),
-                      // const Divider(),
-                      // SizedBox(
-                      //   height:25,
-                      //   child: const ListTile(
-                      //     minVerticalPadding: 0,
-                      //     leading: Icon(Icons.feedback, color: arabicColor,),
-                      //     title: Text('Feedback',
-                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300,)),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 20,),
-                      // const Divider(),
-                      //
-                      // SizedBox(
-                      //   height:25,
-                      //   child: ListTile(
-                      //     minVerticalPadding: 0,
-                      //     onTap: () {
-                      //       _launchURLPrivacy();
-                      //     },
-                      //     leading: const Icon(Icons.privacy_tip, color: arabicColor,),
-                      //     title: const Text('Privacy Polcy',
-                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 20,),
-                      // // ListTile(
-                      // //   onTap: () {
-                      // //     Navigator.push(context,
-                      // //         MaterialPageRoute(builder: (context) => DeveloperInfo()));
-                      // //   },
-                      // //   leading: Icon(Icons.verified, color: arabicColor,),
-                      // //   title: const Text('Developer',
-                      // //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
-                      // // ),
-                      // const Divider(),
-                      // SizedBox(
-                      //   height:25,
-                      //   child: ListTile(
-                      //     minVerticalPadding: 0,
-                      //     leading: Icon(Icons.star_rate_rounded, color: arabicColor,),
-                      //     title: Text('Rate Us',
-                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 20,),
-                      // const Divider(),
-                      // SizedBox(
-                      //   height:25,
-                      //   child: const ListTile(
-                      //     minVerticalPadding: 0,
-                      //     leading: Icon(Icons.share, color: arabicColor,),
-                      //     title: Text('Share Islam786',
-                      //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300)),
-                      //   ),
-                      // ),
-                      // SizedBox(height: 20,),
-                      // const Divider(),
-                      // // Center(child: Text(
-                      // //   'Powered  By\nIslamic  Technologies', textAlign: TextAlign.center,
-                      // //   style: TextStyle(fontSize: 14,
-                      // //       fontFamily: 'AlQalamQuran',
-                      // //       color: arabicColor,
-                      // //       fontWeight: FontWeight.bold),)
-                      // // ),
+                      Image.asset('assets/islam786.png', height: 70,),
                     ],
+                  )
+              ),
+              Container(
+                  height: 600,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  decoration:  const BoxDecoration(
+
+                    image: DecorationImage(
+                      opacity: 0.25,
+                      // colorFilter:
+                      // ColorFilter.mode(Colors.white.withOpacity(0.2),
+                      //     BlendMode.dstATop),
+                      image: AssetImage(
+                        "assets/check.png",
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                )
-            ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 14,),
+                        drawer((){
+                          Get.to(()=>AboutUsScreen());
+                        }, Icons.privacy_tip_outlined, "About us"),
+                        // const SizedBox(height: 9,),
+                        // drawer((){}, Icons.person, "Contact Us"),
+                        const SizedBox(height: 9,),
+                        drawer((){}, Icons.settings, "Setting"),
+                        const SizedBox(height: 9,),
+                        drawer((){}, Icons.card_membership, "Award"),
+                        const SizedBox(height: 9,),
+                        drawer((){}, Icons.feedback, "Feedback"),
+                        const SizedBox(height: 9,),
+                        drawer((){
+                          _launchURLPrivacy();
+                        }, Icons.privacy_tip, "Privacy Polcy"),
+                        const SizedBox(height: 9,),
+                        drawer((){
+                          rateusUrl();
+                        }, Icons.star_rate_rounded, "Rate Us"),
+                        const SizedBox(height: 9,),
+                        drawer((){
+                          sharePress();
+                        }
+                            , Icons.share, "Share Islam786"),
+                        const SizedBox(height: 10,),
 
-
-
-          ],
+                      ],
+                    ),
+                  )
+              ),
+            ],
+          ),
         ),
       ),
       key: _globalKey,
@@ -499,7 +387,6 @@ class _HomeScreenState extends State<HomeScreen> {
             leftOver = time.value.isya!.difference(DateTime.now()).inSeconds;
             duration =
                 time.value.maghrib!.difference(time.value.isya!).inSeconds;
-
             break;
           case Prayer.sunrise:
             nextH = time.value.sunrise?.hour;
@@ -549,104 +436,107 @@ class _HomeScreenState extends State<HomeScreen> {
         String minute = nextM != null ? nextM.toString().padLeft(2, '0') : "--";
         return Stack(
           children: [
-            SafeArea(
-              child: Column(
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30)),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: displayHeight * 0.28,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage(getImage())
-                            ),
+            Column(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30)),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height*.28,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(getImage())
                           ),
-                          child: Container(
+                        ),
+                        child: Container(
+                          color: const Color(0xff3A1660).withOpacity(0.40),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.menu_outlined),
+                                    onPressed: () {
+                                      _globalKey.currentState!.openDrawer();
+                                    },
+                                    color: whiteColor,
+                                  ),
+                                  const Text("Home",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500,color: Colors.white),),
+                                  // Spacer(),
+                                  Row(
+                                   mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                        onTap: (){
+                                          _launchWhatsapp(context);
+                                        },
+                                          child: Image.asset("assets/icons8-whatsapp-24.png",height: 22,width: 22,color: Colors.white,)),
+                                      const SizedBox(
+                                        width: 7,
+                                      ),
+                                      InkWell(
+                                        onTap: (){
 
-                            color: const Color(0xff3A1660).withOpacity(0.40),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.menu_outlined),
-                                      onPressed: () {
-                                        _globalKey.currentState!.openDrawer();
+                                        },
+                                          child: const Icon(Icons.search,color: Colors.white,)),
+                                      const SizedBox(
+                                        width: 7,
+                                      ),
+                                      InkWell(
+                                        onTap: (){
+                                           Get.to(PrayerTimePage());
+                                          //Get.to(()=>PrayerNotification());
+                                        },
+                                          child: const Icon(Icons.notifications,color: Colors.white,)),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      // IconButton(
+                                      //   icon: Icon(Icons.whatshot),
+                                      //   onPressed: () {
+                                      //
+                                      //   },
+                                      //   color: whiteColor,
+                                      // ),
+                                      // SizedBox(
+                                      //   width: 10,
+                                      // ),
+                                      // IconButton(
+                                      //   padding: new EdgeInsets.all(0.0),
+                                      //   icon:  Icon(Icons.search,color: Colors.white,),
+                                      //   onPressed: () {},
+                                      // ),
+                                      // IconButton(
+                                      //   padding: new EdgeInsets.all(0.0),
+                                      //   icon: const Icon(Icons.notifications),
+                                      //   onPressed: () =>
+                                      //       Get.to(
+                                      //         PrayerTimePage(),),
+                                      //   color: whiteColor,
+                                      // ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 0,),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 11, right: 15),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: (){
+                                        Get.to(PrayerTimePage());
                                       },
-                                      color: whiteColor,
-                                    ),
-                                    // Spacer(),
-                                    Row(
-                                     mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        InkWell(
-                                          onTap: (){
-                                            _launchWhatsapp(context);
-                                          },
-                                            child: Image.asset("assets/icons8-whatsapp-24.png",height: 22,width: 22,color: Colors.white,)),
-                                        const SizedBox(
-                                          width: 7,
-                                        ),
-                                        InkWell(
-                                          onTap: (){
-
-                                          },
-                                            child: Icon(Icons.search,color: Colors.white,)),
-                                        const SizedBox(
-                                          width: 7,
-                                        ),
-                                        InkWell(
-                                          onTap: (){
-                                            Get.to(PrayerTimePage());
-                                          },
-                                            child: Icon(Icons.notifications,color: Colors.white,)),
-                                        SizedBox(
-                                          width: 15,
-                                        ),
-                                        // IconButton(
-                                        //   icon: Icon(Icons.whatshot),
-                                        //   onPressed: () {
-                                        //
-                                        //   },
-                                        //   color: whiteColor,
-                                        // ),
-                                        // SizedBox(
-                                        //   width: 10,
-                                        // ),
-                                        // IconButton(
-                                        //   padding: new EdgeInsets.all(0.0),
-                                        //   icon:  Icon(Icons.search,color: Colors.white,),
-                                        //   onPressed: () {},
-                                        // ),
-                                        // IconButton(
-                                        //   padding: new EdgeInsets.all(0.0),
-                                        //   icon: const Icon(Icons.notifications),
-                                        //   onPressed: () =>
-                                        //       Get.to(
-                                        //         PrayerTimePage(),),
-                                        //   color: whiteColor,
-                                        // ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: displayHeight * 0.060,),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 11, right: 15),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
-                                    children: <Widget>[
-
-                                      Column(
+                                      child: Column(
                                         crossAxisAlignment: CrossAxisAlignment
                                             .start,
                                         children: [
@@ -666,7 +556,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 fontSize: 15,
                                                 fontFamily: "Lato",
                                                 letterSpacing: 1.0),),
-                                          const SizedBox(height: 10.0,),
+                                          const SizedBox(height: 5.0,),
                                           const Text("upcoming",
                                             style: TextStyle(color: whiteColor,
                                                 fontWeight: FontWeight.w400,
@@ -738,8 +628,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                         ],
                                       ),
+                                    ),
 
-                                      Column(
+                                    InkWell(
+                                      onTap: ()async{
+                                        final dateTime = await showGlobalDatePicker(
+                                          context: context,
+                                          startDate: JDateModel(dateTime: DateTime.parse("1984-12-24")),
+                                          selectedDate: JDateModel(dateTime: DateTime.now()),
+                                          endDate: JDateModel(dateTime: DateTime.parse("2035-09-20")),
+                                          pickerMode: DatePickerMode.day,
+                                          pickerTheme: Theme.of(context),
+                                          // textDirection: TextDirection.rtl,
+                                          //locale: const Locale("ar", "SA"),
+                                          okButtonText: "OK",
+                                          cancelButtonText: "Cancel",
+                                          onOk: (value) {
+                                            Get.back();
+                                            // debugPrint(value.toString());
+                                            // Navigator.pop(context);
+                                          },
+                                          onCancel: () {
+                                            Get.back();
+                                          },
+                                          primaryColor: Colors.purple.shade900,
+                                          calendarTextColor: Colors.black87,
+                                          backgroundColor: Colors.white,
+                                          borderRadius: const Radius.circular(10),
+                                          buttonTextColor: Colors.purple.shade900,
+                                          headerTitle: Container(
+                                            height: 50,
+                                           decoration: BoxDecoration(
+                                               color: Colors.purple.shade900,
+                                             borderRadius: BorderRadius.circular(12)
+                                           ),
+                                            child: const Center(
+                                              child: Text(
+                                                "Hijri Calender",
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                        if (dateTime != null) {
+                                          debugPrint(dateTime.toString());
+                                        }
+                                      },
+                                      child: Column(
                                         crossAxisAlignment: CrossAxisAlignment
                                             .end,
                                         children: [
@@ -754,640 +689,714 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 fontSize: 19,
                                                 fontFamily: "Lato",
                                                 letterSpacing: 1.0),),
-                                          Text(
-                                            "${_today.longMonthName}, ${_today
-                                                .hYear}", style: TextStyle(
-                                              color: whiteColor,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 11,
-                                              fontFamily: "Lato",
-                                              letterSpacing: 1.0),),
-                                          SizedBox(height: 5.0,),
-                                          Text(
-                                            "${DateFormat('EEEE, d MMM, yyyy')
-                                                .format
-                                              (_todayEnglish)}",
-                                            style: TextStyle(color: whiteColor,
+                                          InkWell(
+                                            onTap: ()async{
+                                              final dateTime = await showGlobalDatePicker(
+                                                context: context,
+                                                startDate: JDateModel(dateTime: DateTime.parse("1984-12-24")),
+                                                selectedDate: JDateModel(dateTime: DateTime.now()),
+                                                endDate: JDateModel(dateTime: DateTime.parse("2035-09-20")),
+                                                pickerMode: DatePickerMode.day,
+                                                pickerTheme: Theme.of(context),
+                                                // textDirection: TextDirection.rtl,
+                                                //locale: const Locale("ar", "SA"),
+                                                okButtonText: "OK",
+                                                cancelButtonText: "Cancel",
+                                                onOk: (value) {
+                                                  Get.back();
+                                                  // debugPrint(value.toString());
+                                                  // Navigator.pop(context);
+                                                },
+                                                onCancel: () {
+                                                  Get.back();
+                                                },
+                                                primaryColor: Colors.purple.shade900,
+                                                calendarTextColor: Colors.black87,
+                                                backgroundColor: Colors.white,
+                                                borderRadius: const Radius.circular(10),
+                                                buttonTextColor: Colors.purple.shade900,
+                                                headerTitle: const Center(
+                                                  child: Text(
+                                                    "Hijri Calender",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                              );
+                                              if (dateTime != null) {
+                                                debugPrint(dateTime.toString());
+                                              }
+                                            },
+                                            child: Text(
+                                              "${_today.longMonthName}, ${_today
+                                                  .hYear}", style: const TextStyle(
+                                                color: whiteColor,
                                                 fontWeight: FontWeight.w400,
-                                                fontSize: 10,
+                                                fontSize: 11,
                                                 fontFamily: "Lato",
                                                 letterSpacing: 1.0),),
+                                          ),
+                                          const SizedBox(height: 5.0,),
+                                          InkWell(
+                                            onTap: ()async{
+                                              final dateTime = await showGlobalDatePicker(
+                                                context: context,
+                                                startDate: JDateModel(dateTime: DateTime.parse("1984-12-24")),
+                                                selectedDate: JDateModel(dateTime: DateTime.now()),
+                                                endDate: JDateModel(dateTime: DateTime.parse("2035-09-20")),
+                                                pickerMode: DatePickerMode.day,
+                                                pickerTheme: Theme.of(context),
+                                               // textDirection: TextDirection.rtl,
+                                                //locale: const Locale("ar", "SA"),
+                                                okButtonText: "حفظ",
+                                                cancelButtonText: "عودة",
+                                                onOk: (value) {
+                                                  Get.back();
+                                                  // debugPrint(value.toString());
+                                                  // Navigator.pop(context);
+                                                },
+                                                onCancel: () {
+                                                  Get.back();
+                                                },
+                                                primaryColor: Colors.purple.shade900,
+                                                calendarTextColor: Colors.black87,
+                                                backgroundColor: Colors.white,
+                                                borderRadius: const Radius.circular(10),
+                                                buttonTextColor: Colors.purple.shade900,
+                                                headerTitle: const Center(
+                                                  child: Text(
+                                                    "التقويم الهجري",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                              );
+                                              if (dateTime != null) {
+                                                debugPrint(dateTime.toString());
+                                              }
+                    },
+
+                                            child: Text(
+                                              "${DateFormat('EEEE, d MMM, yyyy')
+                                                  .format
+                                                (_todayEnglish)}",
+                                              style:
+                                              TextStyle(color: whiteColor,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 10,
+                                                  fontFamily: "Lato",
+                                                  letterSpacing: 1.0),
+                                            ),
+                                          ),
 
 
                                         ],
-                                      )
+                                      ),
+                                    )
 
 
-                                    ],
-                                  ),
-                                ),
-                                const Text(
-                                  "",
-                                  // style: TextStyle(fontSize: 10, color: Colors.white70),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      Positioned(
-                         left: 80,
-                       top: 40,
-                        child: Container(
-                            height: 60,
-                            width: 320,
-                            child: Lottie.asset("assets/animation/Animation - 1697094018761.json",fit: BoxFit.fill,
-
-                            ),
-                      )
-                      )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      children: <Widget>[
-                        SizedBox(
-                          height: displayHeight * 0.07,
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15.0,right: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  child: realTime(
-                                      color: (live == 'verse') ? buttonColor
-                                          .withOpacity(0.1) : darkWhiteColor,
-                                      text: "Verse",
-                                      img: "assets/icons/verse.svg",
-                                      width: 13),
-                                  onTap: () {
-                                    live = 'verse';
-                                    setState(() {
-
-                                    });
-                                  },
-                                ),
-
-                                GestureDetector(
-                                  child: realTime(
-                                      color: (live == 'hadith') ? buttonColor
-                                          .withOpacity(0.1) : darkWhiteColor,
-                                      text: "Hadith",
-                                      img: "assets/icons/hadith.svg",
-                                      width: 17),
-                                  onTap: () {
-                                    live = 'hadis';
-                                    setState(() {
-
-                                    });
-                                  },
-                                ),
-                                GestureDetector(
-                                  child: realTime(
-                                      color: (live == 'flashes') ? buttonColor
-                                          .withOpacity(0.1) : darkWhiteColor,
-                                      text: "Flashes",
-                                      img: "assets/icons/quranword.svg",
-                                      width: 20),
-                                  onTap: () {
-                                    live = 'flashes';
-                                    setState(() {
-
-                                    });
-                                  },
-                                ),
-                                GestureDetector(
-                                  child: realTime(
-                                      color: (live == 'dua') ? buttonColor
-                                          .withOpacity(0.1) : darkWhiteColor,
-                                      text: "Dua",
-                                      img: "assets/icons/quranword.svg",
-                                      width: 20),
-                                  onTap: () {
-                                    live = 'dua';
-                                    setState(() {
-
-                                    });
-                                  },
-                                ),
-                                GestureDetector(
-                                  child: realTime(
-                                      color: (live == 'live') ? buttonColor
-                                          .withOpacity(0.1) : darkWhiteColor,
-                                      text: "Live",
-                                      img: "assets/icons/quranword.svg",
-                                      width: 20),
-                                  onTap: () {
-                                    live = 'live';
-                                    setState(() {
-
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: displayHeight * 0.028,
-                        ),
-                        (live == 'verse') ? (loader == true)
-                            ? SpinKitFadingCircle(
-                          color: Colors.blueAccent,
-                          size: displayHeight * 0.08,
-                        )
-                            : Column(
-                          children: [
-
-                            verseDay("${data?.surahEnName}(${data?.surNum})",
-                              data?.arText, data?.enText,),
-                            SizedBox(
-                              height: displayHeight * 0.02,
-                            ),
-                            if(_isBannerAdReady)
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  height:displayHeight * 0.32,
-                                  width: displayWidth * 0.9,
-                                  child: AdWidget(ad: _BannerAd!,),
+                                  ],
                                 ),
                               ),
-                            Hadith(),
-                            SizedBox(
-                              height: displayHeight * 0.02,
-                            ),
-                            SizedBox(
-                              height: displayHeight * 0.02,
-                            ),
-                            AllahNames(),
-                            SizedBox(
-                              height: displayHeight * 0.02,
-                            ),
 
-
-                          ],
-                        ) : (live == 'flashes') ? Padding(
-                          padding: EdgeInsets.only(
-                              left: 15, right: 15, top: 20),
-                          child: Container(
-                              height: displayHeight * 0.5,
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection(
-                                    'Flashes').limit(1).snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ListView.builder(
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, index) {
-                                          DocumentSnapshot doc = snapshot.data!
-                                              .docs[index];
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: displayHeight * 0.02),
-                                            child: Container(
-                                              width: displayWidth * 0.8,
-                                              height: displayHeight * 0.31,
-                                              decoration: BoxDecoration(
-                                                color: whiteColor,
-                                                borderRadius: const BorderRadius
-                                                    .all(Radius.circular(20)),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.8),
-                                                    blurRadius: 2,
-                                                    spreadRadius: 0.3,
-                                                    // offset: Offset(0, 0),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.all(
-                                                        5.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/quranword.svg",
-                                                              height: displayHeight *
-                                                                  0.041,),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            Column(
-                                                              crossAxisAlignment: CrossAxisAlignment
-                                                                  .start,
-                                                              children: const [
-                                                                Text("Flashes",
-                                                                  style: TextStyle(
-                                                                      color: arabicTextColor,
-                                                                      fontSize: 16,
-                                                                      fontFamily: "Lato",
-                                                                      fontWeight: FontWeight
-                                                                          .w500),),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () async {
-                                                            print('cliek');
-                                                            await share(
-                                                                "Flashes",
-                                                                doc['link']);
-                                                          },
-                                                          child: Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                "assets/icons/share.svg",
-                                                                width: 20,
-                                                                color: arabicColor,),
-                                                              const SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              const Text(
-                                                                "Share",
-                                                                style: TextStyle(
-                                                                    color: arabicColor,
-                                                                    fontSize: 13,
-                                                                    fontFamily: "Lato",
-                                                                    fontWeight: FontWeight
-                                                                        .w400),),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  ClipRRect(
-                                                      borderRadius: BorderRadius
-                                                          .circular(20.0),
-                                                      child: Container(
-                                                        height: 150,
-                                                        width: 300,
-                                                        child: CachedNetworkImage(
-                                                          imageUrl: doc['link'],
-                                                          placeholder: (context,
-                                                              url) =>
-                                                              SpinKitThreeBounce(
-                                                                color: Colors
-                                                                    .purple,
-                                                                size: 20.0,
-                                                              ),
-                                                          errorWidget: (context,
-                                                              url, error) =>
-                                                          new Icon(Icons.error),
-                                                        ),)),
-                                                  SizedBox(
-                                                    height: displayHeight *
-                                                        0.02,
-                                                  ),
-
-
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  } else {
-                                    return Text("No data");
-                                  }
-                                },
-                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    Positioned(
+                       left: 80,
+                     top: 40,
+                      child: SizedBox(
+                          height: 60,
+                          width: 320,
+                          child: Lottie.asset("assets/animation/Animation - 1697094018761.json",fit: BoxFit.fill,
 
                           ),
-                        ) : (live == 'hadis') ? Padding(
-                          padding: EdgeInsets.only(
-                              left: 15, right: 15, top: 20, bottom: 14.0),
-                          child: Container(
-                              height: displayHeight * 0.5,
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection(
-                                    'Hadis').limit(1).snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ListView.builder(
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, index) {
-                                          DocumentSnapshot doc = snapshot.data!
-                                              .docs[index];
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: displayHeight * 0.02),
-                                            child: Container(
-                                              width: displayWidth * 0.8,
-                                              height: displayHeight * 0.31,
-                                              decoration: BoxDecoration(
-                                                color: whiteColor,
-                                                borderRadius: const BorderRadius
-                                                    .all(Radius.circular(20)),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: buttonColor
-                                                        .withOpacity(0.1),
-                                                    blurRadius: 2,
-                                                    spreadRadius: 0.3,
-                                                    // offset: Offset(0, 0),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(
-                                                        5.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Row(
-
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/quranword.svg",
-                                                              height: displayHeight *
-                                                                  0.041,),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            const Column(
-                                                              crossAxisAlignment: CrossAxisAlignment
-                                                                  .start,
-                                                              children: [
-                                                                Text("Hadith",
-                                                                  style: TextStyle(
-                                                                      color: arabicTextColor,
-                                                                      fontSize: 16,
-                                                                      fontFamily: "Lato",
-                                                                      fontWeight: FontWeight
-                                                                          .w500),),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () async {
-                                                            await share(
-                                                                "Hadith",
-                                                                doc['link']);
-                                                          },
-                                                          child: Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                "assets/icons/share.svg",
-                                                                width: 20,
-                                                                color: arabicColor,),
-                                                              const SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              const Text(
-                                                                "Share",
-                                                                style: TextStyle(
-                                                                    color: arabicColor,
-                                                                    fontSize: 13,
-                                                                    fontFamily: "Lato",
-                                                                    fontWeight: FontWeight
-                                                                        .w400),),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  ClipRRect(
-                                                      borderRadius: BorderRadius
-                                                          .circular(20.0),
-                                                      child: Container(
-                                                        height: 150,
-                                                        width: 300,
-                                                        child: CachedNetworkImage(
-
-                                                          imageUrl: doc['link'],
-                                                          fit: BoxFit.fill,
-
-                                                          placeholder: (context,
-                                                              url) =>
-                                                              SpinKitThreeBounce(
-                                                                color: Colors
-                                                                    .purple,
-                                                                size: 20.0,
-                                                              ),
-                                                          errorWidget: (context,
-                                                              url, error) =>
-                                                          new Icon(Icons.error),
-                                                        ),)),
-
-
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  } else {
-                                    return Text("No data");
-                                  }
-                                },
-                              )
-
-                          ),
-                        ) : (live == 'dua') ? Padding(
-                          padding: const EdgeInsets.only(
-                              left: 5, right: 5, top: 10, bottom: 14.0),
-                          child: Container(
-                              height: displayHeight * 0.5,
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection(
-                                    'Dua').limit(1).snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return ListView.builder(
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, index) {
-                                          DocumentSnapshot doc = snapshot.data!
-                                              .docs[index];
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: displayHeight * 0.02),
-                                            child: Container(
-                                              width: displayWidth * 0.8,
-                                              height: displayHeight * 0.31,
-                                              decoration: BoxDecoration(
-                                                color: whiteColor,
-                                                borderRadius: const BorderRadius
-                                                    .all(Radius.circular(20)),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: buttonColor
-                                                        .withOpacity(0.1),
-                                                    blurRadius: 2,
-                                                    spreadRadius: 0.3,
-                                                    // offset: Offset(0, 0),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.all(
-                                                        5.0),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              "assets/icons/quranword.svg",
-                                                              height: displayHeight *
-                                                                  0.041,),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            Column(
-                                                              crossAxisAlignment: CrossAxisAlignment
-                                                                  .start,
-                                                              children: const [
-                                                                Text("Dua",
-                                                                  style: TextStyle(
-                                                                      color: arabicTextColor,
-                                                                      fontSize: 16,
-                                                                      fontFamily: "Lato",
-                                                                      fontWeight: FontWeight
-                                                                          .w500),),
-                                                              ],
-                                                            ),
-
-                                                          ],
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () async {
-                                                            print('cliek');
-                                                            await share("Dua",
-                                                                doc['link']);
-                                                          },
-                                                          child: Row(
-
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                "assets/icons/share.svg",
-                                                                width: 20,
-                                                                color: arabicColor,),
-                                                              const SizedBox(
-                                                                width: 5,
-                                                              ),
-                                                              const Text(
-                                                                "Share",
-                                                                style: TextStyle(
-                                                                    color: arabicColor,
-                                                                    fontSize: 13,
-                                                                    fontFamily: "Lato",
-                                                                    fontWeight: FontWeight
-                                                                        .w400),),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-
-                                                  ClipRRect(
-                                                      borderRadius: BorderRadius
-                                                          .circular(20.0),
-                                                      child: Container(
-                                                        height: 150,
-                                                        child: CachedNetworkImage(
-
-                                                          imageUrl: doc['link'],
-                                                          placeholder: (context,
-                                                              url) =>
-                                                              SpinKitThreeBounce(
-                                                                color: Colors
-                                                                    .purple,
-                                                                size: 20.0,
-                                                              ),
-                                                          errorWidget: (context,
-                                                              url, error) =>
-                                                          new Icon(Icons.error),
-                                                        ),)),
-
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  } else {
-                                    return Text("No data");
-                                  }
-                                },
-                              )
-
-                          ),
-                        ) : (live == 'live') ? Padding(
-                          padding: EdgeInsets.only(left: 15,
-                              right: 15,
-                              top: displayHeight * 0.1,
-                              bottom: 14.0),
-                          child: GestureDetector(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/icons/Live.svg", width: 100,
-                                  height: 100,),
-                                SizedBox(
-                                  height: displayHeight * 0.02,
-                                ),
-                                const Text("Live")
-                              ],
-                            ),
-                            onTap: () {
-                              _launchWhatsapp(context);
-                              // Navigator.push(context, MaterialPageRoute(
-                              //     builder: (context) => Tasbee()));
-                            },
-                          ),
-
-                        ) : SizedBox()
-                      ],
-                    ),
+                    )
+                    )
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Expanded(
+                  child: ListView(
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0,right: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              child: realTime(
+                                  color: (live == 'verse') ? buttonColor
+                                      .withOpacity(0.1) : darkWhiteColor,
+                                  text: "Verse",
+                                  img: "assets/icons/verse.svg",
+                                  width: 13),
+                              onTap: () {
+                                live = 'verse';
+                                setState(() {
+                                });
+                              },
+                            ),
+
+                            GestureDetector(
+                              child: realTime(
+                                  color: (live == 'hadith') ? buttonColor
+                                      .withOpacity(0.1) : darkWhiteColor,
+                                  text: "Hadith",
+                                  img: "assets/icons/hadith.svg",
+                                  width: 17),
+                              onTap: () {
+                                live = 'hadis';
+                                setState(() {
+
+                                });
+                              },
+                            ),
+                            GestureDetector(
+                              child: realTime(
+                                  color: (live == 'flashes') ? buttonColor
+                                      .withOpacity(0.1) : darkWhiteColor,
+                                  text: "Quotes",
+                                  img: "assets/icons/gallery-photo.svg",
+                                  width: 20),
+                              onTap: () {
+                                live = 'flashes';
+                                setState(() {
+                                });
+                              },
+                            ),
+                            GestureDetector(
+                              child: realTime(
+                                  color: (live == 'dua') ? buttonColor
+                                      .withOpacity(0.1) : darkWhiteColor,
+                                  text: "Dua",
+                                  img: "assets/icons/pray (1).svg",
+                                  width: 20),
+                              onTap: () {
+                                Get.to(()=>HomeDua());
+                                // live = 'dua';
+                                setState(() {
+
+                                });
+                              },
+                            ),
+                            GestureDetector(
+                              child: realTime(
+                                  color: (live == 'live') ? buttonColor
+                                      .withOpacity(0.1) : darkWhiteColor,
+                                  text: "Live",
+                                  img: "assets/icons/boy-services-support-icon.svg",
+                                  width: 18),
+                              onTap: () {
+                                live = 'live';
+                                setState(() {
+
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: displayHeight * 0.028,
+                      ),
+                      (live == 'verse') ? Column(
+                        children: [
+                           // verseDay("${data?.surahEnName}(${data?.surNum})",
+                           //  data?.arText, data?.enText,),
+                          verse(),
+                          SizedBox(
+                            height: displayHeight * 0.02,
+                          ),
+                          if(_isBannerAdReady)
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: SizedBox(
+                                height:displayHeight * 0.32,
+                                width: displayWidth * 0.15,
+                                child: AdWidget(ad: _BannerAd!,),
+                              ),
+                            ),
+                          Hadith(),
+                          SizedBox(
+                            height: displayHeight * 0.02,
+                          ),
+                          AllahNames(),
+                          SizedBox(
+                            height: displayHeight * 0.02,
+                          ),
+                          duaOfTheDay(),
+                          // Duatrans(),
+                          SizedBox(
+                            height: displayHeight * 0.02,
+                          ),
+
+
+                        ],
+                      ) :
+                      (live == 'flashes') ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, top: 20),
+                        child: Container(
+                            height: displayHeight * 0.5,
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance.collection(
+                                  'Flashes').limit(1).snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, index) {
+                                        DocumentSnapshot doc = snapshot.data!
+                                            .docs[index];
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: displayHeight * 0.02),
+                                          child: Container(
+                                            width: displayWidth * 0.8,
+                                            height: displayHeight * 0.31,
+                                            decoration: BoxDecoration(
+                                              color: whiteColor,
+                                              borderRadius: const BorderRadius
+                                                  .all(Radius.circular(20)),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.8),
+                                                  blurRadius: 2,
+                                                  spreadRadius: 0.3,
+                                                  // offset: Offset(0, 0),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.all(
+                                                      5.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            "assets/icons/quranword.svg",
+                                                            height: displayHeight *
+                                                                0.041,),
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          const Column(
+                                                            crossAxisAlignment: CrossAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              Text("Flashes",
+                                                                style: TextStyle(
+                                                                    color: arabicTextColor,
+                                                                    fontSize: 16,
+                                                                    fontFamily: "Lato",
+                                                                    fontWeight: FontWeight
+                                                                        .w500),),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          print('cliek');
+                                                          await share(
+                                                              "Flashes",
+                                                              doc['link']);
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              "assets/icons/share.svg",
+                                                              width: 20,
+                                                              color: arabicColor,),
+                                                            const SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            const Text(
+                                                              "Share",
+                                                              style: TextStyle(
+                                                                  color: arabicColor,
+                                                                  fontSize: 13,
+                                                                  fontFamily: "Lato",
+                                                                  fontWeight: FontWeight
+                                                                      .w400),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                ClipRRect(
+                                                    borderRadius: BorderRadius
+                                                        .circular(20.0),
+                                                    child: Container(
+                                                      height: 150,
+                                                      width: 300,
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: doc['link'],
+                                                        placeholder: (context,
+                                                            url) =>
+                                                            SpinKitThreeBounce(
+                                                              color: Colors
+                                                                  .purple,
+                                                              size: 20.0,
+                                                            ),
+                                                        errorWidget: (context,
+                                                            url, error) =>
+                                                        new Icon(Icons.error),
+                                                      ),)),
+                                                SizedBox(
+                                                  height: displayHeight *
+                                                      0.02,
+                                                ),
+
+
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                } else {
+                                  return Text("No data");
+                                }
+                              },
+                            )
+
+                        ),
+                      ) :
+                      (live == 'hadis') ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, top: 20, bottom: 14.0),
+                        child: SizedBox(
+                            height: displayHeight * 0.5,
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance.collection(
+                                  'Hadis').limit(1).snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, index) {
+                                        DocumentSnapshot doc = snapshot.data!
+                                            .docs[index];
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: displayHeight * 0.02),
+                                          child: Container(
+                                            width: displayWidth * 0.8,
+                                            height: displayHeight * 0.31,
+                                            decoration: BoxDecoration(
+                                              color: whiteColor,
+                                              borderRadius: const BorderRadius
+                                                  .all(Radius.circular(20)),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: buttonColor
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 2,
+                                                  spreadRadius: 0.3,
+                                                  // offset: Offset(0, 0),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      5.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            "assets/icons/quranword.svg",
+                                                            height: displayHeight *
+                                                                0.041,),
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          const Column(
+                                                            crossAxisAlignment: CrossAxisAlignment
+                                                                .start,
+                                                            children: [
+                                                              Text("Hadith",
+                                                                style: TextStyle(
+                                                                    color: arabicTextColor,
+                                                                    fontSize: 16,
+                                                                    fontFamily: "Lato",
+                                                                    fontWeight: FontWeight
+                                                                        .w500),),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          await share(
+                                                              "Hadith",
+                                                              doc['link']);
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              "assets/icons/share.svg",
+                                                              width: 20,
+                                                              color: arabicColor,),
+                                                            const SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            const Text(
+                                                              "Share",
+                                                              style: TextStyle(
+                                                                  color: arabicColor,
+                                                                  fontSize: 13,
+                                                                  fontFamily: "Lato",
+                                                                  fontWeight: FontWeight
+                                                                      .w400),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                ClipRRect(
+                                                    borderRadius: BorderRadius
+                                                        .circular(20.0),
+                                                    child: Container(
+                                                      height: 150,
+                                                      width: 300,
+                                                      child: CachedNetworkImage(
+
+                                                        imageUrl: doc['link'],
+                                                        fit: BoxFit.fill,
+
+                                                        placeholder: (context,
+                                                            url) =>
+                                                            SpinKitThreeBounce(
+                                                              color: Colors
+                                                                  .purple,
+                                                              size: 20.0,
+                                                            ),
+                                                        errorWidget: (context,
+                                                            url, error) =>
+                                                        new Icon(Icons.error),
+                                                      ),)),
+
+
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                } else {
+                                  return Text("No data");
+                                }
+                              },
+                            )
+
+                        ),
+                      ) :
+                      (live == 'dua') ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 5, right: 5, top: 10, bottom: 14.0),
+                        child: Container(
+                            height: displayHeight * 0.5,
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance.collection(
+                                  'Dua').limit(1).snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return ListView.builder(
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, index) {
+                                        DocumentSnapshot doc = snapshot.data!
+                                            .docs[index];
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: displayHeight * 0.02),
+                                          child: Container(
+                                            width: displayWidth * 0.8,
+                                            height: displayHeight * 0.31,
+                                            decoration: BoxDecoration(
+                                              color: whiteColor,
+                                              borderRadius: const BorderRadius
+                                                  .all(Radius.circular(20)),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: buttonColor
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 2,
+                                                  spreadRadius: 0.3,
+                                                  // offset: Offset(0, 0),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.all(
+                                                      5.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            "assets/icons/quranword.svg",
+                                                            height: displayHeight *
+                                                                0.041,),
+                                                          const SizedBox(
+                                                            width: 5,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment: CrossAxisAlignment
+                                                                .start,
+                                                            children: const [
+                                                              Text("Dua",
+                                                                style: TextStyle(
+                                                                    color: arabicTextColor,
+                                                                    fontSize: 16,
+                                                                    fontFamily: "Lato",
+                                                                    fontWeight: FontWeight
+                                                                        .w500),),
+                                                            ],
+                                                          ),
+
+                                                        ],
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          print('cliek');
+                                                          await share("Dua",
+                                                              doc['link']);
+                                                        },
+                                                        child: Row(
+
+                                                          children: [
+                                                            SvgPicture.asset(
+                                                              "assets/icons/share.svg",
+                                                              width: 20,
+                                                              color: arabicColor,),
+                                                            const SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            const Text(
+                                                              "Share",
+                                                              style: TextStyle(
+                                                                  color: arabicColor,
+                                                                  fontSize: 13,
+                                                                  fontFamily: "Lato",
+                                                                  fontWeight: FontWeight
+                                                                      .w400),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+
+                                                ClipRRect(
+                                                    borderRadius: BorderRadius
+                                                        .circular(20.0),
+                                                    child: Container(
+                                                      height: 150,
+                                                      child: CachedNetworkImage(
+
+                                                        imageUrl: doc['link'],
+                                                        placeholder: (context,
+                                                            url) =>
+                                                            const SpinKitThreeBounce(
+                                                              color: Colors
+                                                                  .purple,
+                                                              size: 20.0,
+                                                            ),
+                                                        errorWidget: (context,
+                                                            url, error) =>
+                                                        new Icon(Icons.error),
+                                                      ),)),
+
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                } else {
+                                  return Text("No data");
+                                }
+                              },
+                            )
+
+                        ),
+                      ) :
+                      (live == 'live') ? Padding(
+                        padding: EdgeInsets.only(left: 15,
+                            right: 15,
+                            top: displayHeight * 0.1,
+                            bottom: 14.0),
+                        child: GestureDetector(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/Live.svg", width: 100,
+                                height: 100,),
+                              SizedBox(
+                                height: displayHeight * 0.02,
+                              ),
+                              const Text("Live")
+                            ],
+                          ),
+                          onTap: () {
+                            _launchWhatsapp(context);
+                            // Navigator.push(context, MaterialPageRoute(
+                            //     builder: (context) => Tasbee()));
+                          },
+                        ),
+
+                      ) :
+                      SizedBox()
+                    ],
+                  ),
+                ),
+              ],
             ),
 
             Positioned(
-              top: displayHeight * 0.275,
-              left: displayWidth * 0.08,
+              top: MediaQuery.of(context).size.height*.25,
+              left:18,
               child: Container(
-                width: displayWidth * 0.85,
-                height: displayHeight * 0.08,
+                width: displayWidth * 0.90,
+                height: displayHeight * 0.065,
                 // padding: EdgeInsets.only(
                 //     top: displayHeight * 0.007, bottom: displayHeight * 0.009),
                 decoration: BoxDecoration(
                   color: whiteColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.8),
@@ -1400,67 +1409,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
-                        child: Image.asset("assets/icons/dua1.png",
-                          width:45,),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => const Dua()));
-                        },
-                      ),
-                      GestureDetector(
-                        child: Image.asset("assets/icons/mname.png",
-                          width: 50),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => const MuhammadName()));
-                        },
-                      ),
-                      GestureDetector(
-                        child: Image.asset("assets/icons/aname.png",
-                          width: 45),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => const AllahName()));
-                        },
-                      ),
-                      GestureDetector(
-                        child: Image.asset("assets/icons/tasbeeh1.png",
-                          height: 48,
-                          width: 48),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => const Tasbee()));
-                        },
-                      ),
-                      Column(
-
-        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            child: Container(
-                              height: 43,
-                              width: 43,
-                              decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                        'assets/icons/qiblanew.png',),
-                                      fit: BoxFit.cover
-                                  )
-                              ),
-                            ),
-
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => const QiblaScreen()));
-                            },
-                          ),
-                          Text('Qibla',
-                            style: TextStyle(fontSize: 5,
-                                fontWeight: FontWeight.bold,
-                                color: arabicColor),)
-                        ],
-                      ),
+                     stackContainer('assets/icons/icons8-notepad-100.png',"Notepade",(){
+                       Get.to(()=>NotePad());
+                     }),
+                     stackContainer('assets/icons/icons8-prophet-64.png',"Name of Prophet",(){
+                       Get.to(()=>MuhammadName());
+                     }),
+                     stackContainer('assets/icons/icons8-god-64.png',"Name of Allah",(){
+                       Get.to(()=>AllahName());
+                     }),
+                     stackContainer('assets/icons/icons8-prayer-beads-96.png',"Tasbeeh",(){
+                       Get.to(()=>Tasbee());
+                     }),
+                     stackContainer('assets/icons/icons8-qibla-64.png',"Qibla",(){
+                       Get.to(()=>QiblaScreen());
+                     }),
                     ],
                   ),
                 ),
@@ -1481,7 +1444,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
   _launchURLPrivacy() async {
-    const url = 'https://www.softwebtuts.com/p/privacy-policy.html';
+    const url = 'https://quranteacher.uk/bb/privacy-policy.php';
+
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -1492,137 +1456,128 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget realTime(
       {required Color color, required String text, required String img, required double width}) {
     var displayWidth = MediaQuery
-        .of(context)
+        .of(context as BuildContext)
         .size
         .width;
     var displayHeight = MediaQuery
-        .of(context)
+        .of(context as BuildContext)
         .size
         .height;
-    return Container(
-      margin: EdgeInsets.only(left: 4.0, right: 4.0),
-      width: displayWidth * 0.28,
-      height: displayHeight * 0.05,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: const BorderRadius.all(Radius.circular(25)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SvgPicture.asset(img, width: width,),
-            Text(text,
-              style: const TextStyle(fontSize: 10, fontFamily: "Noorehira"),),
-          ],
-        ),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+
+        SvgPicture.asset(img, width: width,color: arabicColor,),
+        const SizedBox(width: 5,),
+        Text(text,
+          style: const TextStyle(fontSize: 10, fontFamily: "Noorehira"),),
+      ],
     );
   }
 
-  Widget verseDay(surah, arabicAya, engAya) {
+   verseDay(surah, arabicAya,engAya) {
     var displayWidth = MediaQuery
-        .of(context)
+        .of(context as BuildContext)
         .size
         .width;
     var displayHeight = MediaQuery
-        .of(context)
+        .of(context as BuildContext)
         .size
         .height;
     print(_today);
-
-    return Container(
-      width: displayWidth * 0.9,
-      height: displayHeight * 0.32,
-      decoration: BoxDecoration(
-        color: whiteColor,
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: buttonColor.withOpacity(0.2),
-            blurRadius: 3,
-            spreadRadius: 0.5,
-            // offset: Offset(0, 0),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 14.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SvgPicture.asset("assets/icons/verse.svg", height: 25,),
-                    SizedBox(width: 5,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Verse of the Day", style: TextStyle(
-                            color: arabicTextColor,
-                            fontSize: 16,
-                            fontFamily: "Lato",
-                            fontWeight: FontWeight.w500),),
-                        Text("$surah", style:
-                        TextStyle(color: greenColor, fontSize: 13,
-                            fontFamily: "Lato", fontWeight: FontWeight.w300),)
-                      ],
-                    ),
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    SvgPicture.asset("assets/icons/share.svg", width: 20,
-                        color: arabicColor),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    const Text("Share", style: TextStyle(color: arabicColor,
-                        fontSize: 14,
-                        fontFamily: "Noorehira",
-                        fontWeight: FontWeight.w400),),
-                  ],
-                ),
-              ],
+    // var hour=DateTime.now().hour;
+    // if (hour < 24) {
+      return Container(
+        width: displayWidth * 0.9,
+        height: displayHeight * 0.25,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          boxShadow: [
+            BoxShadow(
+              color: buttonColor.withOpacity(0.2),
+              blurRadius: 3,
+              spreadRadius: 0.5,
+              // offset: Offset(0, 0),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Flexible(
-              child: SelectableText(
-                "$arabicAya", textAlign: TextAlign.center,
-
-                style: TextStyle(color: arabicColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "Noorehira",
-                    overflow: TextOverflow.ellipsis),
-              ),
-
-            ),
-
-            Flexible(
-              child: SelectableText(
-                "$engAya", textAlign: TextAlign.justify,
-                style: TextStyle(color: blackColor,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "AlQalamQuran",
-                    overflow: TextOverflow.ellipsis),
-
-              ),
-            ),
-
-
           ],
         ),
-      ),
-    );
+        child: Padding(
+          padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 14.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      SvgPicture.asset("assets/icons/verse.svg", height: 25,),
+                      const SizedBox(width: 5,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Verse of the Day", style: TextStyle(
+                              color: arabicTextColor,
+                              fontSize: 16,
+                              fontFamily: "Lato",
+                              fontWeight: FontWeight.w500),),
+                          Text("$surah", style:
+                          const TextStyle(color: black, fontSize: 13,
+                              fontFamily: "Lato", fontWeight: FontWeight.w300),)
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  Row(
+                    children: [
+                      SvgPicture.asset("assets/icons/share.svg", width: 20,
+                          color: arabicColor),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Text("Share", style: TextStyle(color: arabicColor,
+                          fontSize: 14,
+                          fontFamily: "Noorehira",
+                          fontWeight: FontWeight.w400),),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+
+              Flexible(
+                child: SelectableText(
+                  "$arabicAya", textAlign: TextAlign.center,
+                  style: TextStyle(color: arabicColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "Noorehira",
+                      overflow: TextOverflow.ellipsis),
+                ),
+
+              ),
+
+              Flexible(
+                child: SelectableText(
+                  "$engAya", textAlign: TextAlign.justify,
+                  style: TextStyle(color: blackColor,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "AlQalamQuran",
+                      overflow: TextOverflow.ellipsis),
+
+                ),
+              ),
+
+
+            ],
+          ),
+        ),
+      );
+
   }
 
   Widget imageDialog(text, path, context) {
@@ -1677,7 +1632,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
           content: Text(
               'Location services are disabled. Please enable the services')));
       return false;
@@ -1686,13 +1641,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
             const SnackBar(content: Text('Location permissions are denied')));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
           content: Text(
               'Location permissions are permanently denied, we cannot request permissions.')));
       return false;
@@ -1742,4 +1697,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   }
+
+  stackContainer(image,text,onPress) {
+    return GestureDetector(
+      child:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(image,height: 22.0,width: 22.0, color:arabicColor,),
+          const SizedBox(height: 2,),
+          _textUtils.bold(text, arabicColor, 7.0, TextAlign.center)
+        ],
+      ),
+      // Image.asset("assets/icons/dua1.png",
+      //   width:45,),
+      onTap: onPress
+    );
+  }
+
+  Widget _JHijriAsWidget(){
+    return JGlobalDatePicker(
+      widgetType: WidgetType.JContainer,
+      pickerType: PickerType.JHijri,
+      buttons: const SizedBox(),
+      primaryColor: Colors.blue,
+      calendarTextColor: Colors.white,
+      backgroundColor: Colors.black,
+      borderRadius: const Radius.circular(10),
+      headerTitle: const Center(
+        child: Text("التقويم الهجري"),
+      ),
+      startDate: JDateModel(dateTime: DateTime.parse("1984-12-24")),
+      selectedDate: JDateModel(dateTime: DateTime.now()),
+      endDate: JDateModel(dateTime: DateTime.parse("2030-09-20")),
+      pickerMode: DatePickerMode.day,
+      pickerTheme: Theme.of(context),
+      //textDirection: TextDirection.rtl,
+      onChange: (val) {
+        debugPrint(val.toString());
+      },
+    );
+  }
+
+
+
 }
+

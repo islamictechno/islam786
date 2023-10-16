@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:islamm786/Data/Allah_names.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,18 +21,32 @@ class AllahName extends StatefulWidget {
 class _AllahNameState extends State<AllahName> {
   PageController? controller;
   int currentIndex = 0;
+  PageController _pageController = PageController(
+    initialPage: 0,
+  );
 
 var data=jsonDecode(jsonData);
   @override
   void initState() {
     print(data[0].length);
-    controller = PageController();
+    PageController();
     super.initState();
+    Timer.periodic( const Duration(milliseconds: 4200), (Timer timer) {
+      if (currentIndex < 100) {
+        currentIndex++;
+        _pageController.animateToPage(
+          currentIndex,
+          duration: const Duration(seconds: 3),
+          curve: Curves.ease,
+        );
+      } else {
+        currentIndex = 2;
+      }
+    });
   }
-
   @override
   void dispose() {
-    controller!.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -40,20 +57,20 @@ var data=jsonDecode(jsonData);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: arabicColor,
         elevation: 0,
         title: Text("Names of Allah", style: TextStyle(color: whiteColor, fontSize: 20, fontWeight: FontWeight.w400, fontFamily: "Lato"),),
         centerTitle: true,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 20),
           child: Row(
             children: [
               GestureDetector(
-                child: SvgPicture.asset("assets/icons/crosss.svg",width: 30,),
-                onTap: (){
-                  Navigator.pop(context);
-                },
-              ),
+                  onTap: (){
+                    Get.back();
+                  },
+                  child: Icon(Icons.arrow_back_ios,size: 20,color: Colors.white,))
+
             ],
           ),
         ),
@@ -74,7 +91,7 @@ var data=jsonDecode(jsonData);
                 });
               },
               itemCount: data.length,
-              controller: controller,
+              controller: _pageController,
               itemBuilder: (ctx, i) {
                 var details=data[i];
                 print(details);
@@ -103,26 +120,26 @@ var data=jsonDecode(jsonData);
                         SizedBox(
                           height: displayHeight * 0.06,
                         ),
-                        InkWell(
-                            onTap:()async{
-                              var audio = AudioPlayer();
-                              audio.play(
-    '${details[5]}');
-
-
-                    },
-                            child: SvgPicture.asset("assets/icons/volume.svg", width: 40,)),
-                        SizedBox(
-                          height: displayHeight * 0.06,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Text(details[4],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: whiteColor.withOpacity(0.6),
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300),),
-                        ),
+    //                     InkWell(
+    //                         onTap:()async{
+    //                           var audio = AudioPlayer();
+    //                           audio.play(
+    // '${details[5]}');
+    //
+    //
+    //                 },
+    //                         child: SvgPicture.asset("assets/icons/volume.svg", width: 40,)),
+    //                     SizedBox(
+    //                       height: displayHeight * 0.06,
+    //                     ),
+    //                     Padding(
+    //                       padding: const EdgeInsets.only(left: 20, right: 20),
+    //                       child: Text(details[4],
+    //                         textAlign: TextAlign.center,
+    //                         style: TextStyle(color: whiteColor.withOpacity(0.6),
+    //                             fontSize: 18,
+    //                             fontWeight: FontWeight.w300),),
+    //                     ),
 
                       ],
 

@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:islamm786/Constants.dart';
+import 'package:islamm786/app_utils/text_utils.dart';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +15,9 @@ import '../../../../utils/constants/end_points.dart';
 import '../../../providers/read_chapter_provider.dart';
 
 class ChapterVerseWidget extends StatelessWidget {
-  const ChapterVerseWidget({Key? key, required this.chapterVerse}) : super(key: key);
+   ChapterVerseWidget({Key? key, required this.chapterVerse}) : super(key: key);
   final ChapterVerse chapterVerse;
+  TextUtils _textUtils= TextUtils();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +53,30 @@ class ChapterVerseWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      InkWell(
+                        onTap:(){
+                          Fluttertoast.showToast(
+                              msg: "Coming Soon",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.white,
+                              textColor: Colors.purple.shade900,
+                              fontSize: 16.0
+                          );
+    },
+                        child: Container(
+                          height:25,
+                          width: 75,
+                          decoration: BoxDecoration(
+
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(color: arabicColor)
+                          ),
+                          child: Center(child: _textUtils.normal("Tafseer", arabicColor, 12.0, TextAlign.center)),
+                        ),
+                      ),
+                      SizedBox(width: 10,),
                       Icon(IconlyLight.send, color: arabicColor,),
                       SizedBox(width: 10,),
                       InkWell(
