@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="74" viewBox="0 0 64 74">
+  <g id="quranic_word" transform="translate(-850.5 -1270)">
+    <text id="ب" transform="translate(850.5 1329)" fill="#431970" font-size="46" font-family="GeezaPro-Bold, Geeza Pro" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0">ب</tspan></text>
+    <text id="ا_" data-name="ا " transform="translate(866.5 1311)" fill="#431970" font-size="46" font-family="Helvetica-Bold, Helvetica" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0"> </tspan><tspan y="0" font-family="GeezaPro-Bold, Geeza Pro">ا</tspan></text>
+    <text id="_ج" data-name=" ج" transform="translate(866.5 1325)" fill="#431970" font-size="46" font-family="GeezaPro-Bold, Geeza Pro" font-weight="700" letter-spacing="0.03em"><tspan x="0" y="0">ج</tspan><tspan y="0" font-family="Helvetica-Bold, Helvetica"> </tspan></text>
+  </g>
+</svg>

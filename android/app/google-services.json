@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "31508930905",
+    "project_id": "newislam786-37764",
+    "storage_bucket": "newislam786-37764.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31508930905:android:4ff4800aa4f16ff37fec48",
+        "android_client_info": {
+          "package_name": "com.ito.islam786"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31508930905-4a37do7vl51fnv7ooe22dkuqh9f5dhrl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ito.islam786",
+            "certificate_hash": "4cea5c6097cb9d60fb6e3acd81312ee5060eae47"
+          }
+        },
+        {
+          "client_id": "31508930905-9gpgl6p5noj4keuuesvakg4a8g4jr8cu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbTsekq3AS2BgXhlkavYfItii1xVEWUOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31508930905-9gpgl6p5noj4keuuesvakg4a8g4jr8cu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
