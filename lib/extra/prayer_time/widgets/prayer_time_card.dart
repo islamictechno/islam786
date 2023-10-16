@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:islamm786/Constants.dart';
+import 'package:islamm786/extra/alaram/app/data/theme_data.dart';
 
 import 'package:unicons/unicons.dart';
 
@@ -20,7 +21,7 @@ class PrayerTimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: buttonColor.withOpacity(0.1),
+      //color: buttonColor.withOpacity(0.1),
       borderRadius: BorderRadius.circular(25),
       child: Obx(() {
         var prayer = prayerTimeC.nextPrayer.value;
@@ -120,99 +121,141 @@ class PrayerTimeCard extends StatelessWidget {
         String minute = nextM != null ? nextM.toString().padLeft(2, '0') : "--";
 
         return Container(
-          height: 100,
+          decoration:  BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+
+                arabicColor,
+                 arabicColor,
+                Color(0xff4F1C74),
+                Color(0xff5b2886),
+                Color(0xff5A2A91),
+                Color(0xff8650Bd),
+                Color(0xff8a51d1),
+                 Color(0xff9662d6),
+                 Color(0xff9662d6),
+                 // Color(0xffd0b9ed),
+                 // Color(0xffe8dcf6),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.topRight,
+            ),
+            // boxShadow: [
+            //
+            //   BoxShadow(
+            //     color: arabicColor,
+            //     blurRadius: 1,
+            //     spreadRadius: 2,
+            //     offset: Offset(1, 1),
+            //   ),
+            // ],
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+          ),
+          // height: 100,
+          padding: EdgeInsets.all(15),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Column(
+                  // // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                   //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Time:  ",
+                            "Time: ",
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontFamily: "AlQalamQuran",
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontFamily: "Uthmani",
                                 fontWeight: FontWeight.bold),
                           ),
-                          Text(
-                            "$hour:$minute",style:
-                          TextStyle(
-                              fontSize: 20,
-                              fontFamily: "AlQalamQuran",
-                              color: Colors.black,fontWeight: FontWeight.bold),
+
+                          Padding(
+                            padding: const EdgeInsets.only(top: 1.0),
+                            child: Text(
+                              "$hour:$minute",style:
+                            TextStyle(
+                                fontSize: 15,
+                                fontFamily: "Uthmani",
+                                color: Colors.white,fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
+                    ),
+                    Obx(
+                      () => Text.rich(
+                        TextSpan(
 
+                          text: (nextH != null &&
+                                  prayerTimeC.nextPrayer.value.name == "none")
+                              ? "Qiyam"
+                              : (nextH == null)
+                                  ? ""
+                                  : prayerTimeC
+                                      .nextPrayer.value.name.capitalizeFirst,
 
-                      Obx(
-                        () => Text.rich(
-                          TextSpan(
-                            text: (nextH != null &&
-                                    prayerTimeC.nextPrayer.value.name == "none")
-                                ? "Qiyam"
-                                : (nextH == null)
-                                    ? ""
-                                    : prayerTimeC
-                                        .nextPrayer.value.name.capitalizeFirst,
-                           style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: "AlQalamQuran",
-                                color: Colors.black,fontWeight: FontWeight.w500),
+                         style: TextStyle(
+                          
+                           height: 1,
+                              fontSize: 15,
+                              fontFamily: "Uthmani",
+                              color: Colors.white,fontWeight: FontWeight.w500,),
 
-                            children: [
-                              const TextSpan(text: " - "),
-                              TextSpan(
-                                text: address.isBlank! ? "" : address.value.country,
-                              ),
-                            ],
-                          ),
+                          children: [
+                            const TextSpan(text: " - "),
+                            TextSpan(
+                              text: address.isBlank! ? "" : address.value.country,
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      // Row(
-                      //   children: [
-                      //     const Icon(
-                      //       Icons.location_on,
-                      //       size: 30,
-                      //       color: arabicColor,
-                      //     ),
-                      //     const SizedBox(width: 8),
-                      //     Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Text(
-                      //           "${address.value.street ?? "--"}",
-                      //         ),
-                      //         Text(
-                      //           address.value.locality ?? "--",
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ],
-                      // ),
-                    ],
-                  ),
+                    ),
+                     const SizedBox(height: 6),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //  Icon(
+                        //   Icons.location_on,
+                        //   size: 30,
+                        //   color: Colors.red.shade400,
+                        // ),
+                        // const SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Text(
+                            //   address.value.street ?? "--",
+                            //   style: const TextStyle(color: Colors.white),
+                            // ),
+                            Text(
+                              address.value.locality ?? "--",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 CircularCountDownTimer(
-                  textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                  textStyle: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
                   width: MediaQuery.of(context).size.width * 0.22,
                   height: MediaQuery.of(context).size.width * 0.22,
                   duration: duration,
                   initialDuration: initDuration,
                   controller: prayerTimeC.cT,
-                  fillColor: arabicColor,
+                  fillColor: Colors.white,
                   backgroundColor:
-                      buttonColor.withOpacity(0.1),
-                  ringColor:  buttonColor.withOpacity(0.1),
+                      buttonColor.withOpacity(0.8),
+                  ringColor:  buttonColor.withOpacity(0.6),
                   // strokeWidth: 20.0,
                   strokeCap: StrokeCap.round,
 

@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,8 @@ import 'package:provider/provider.dart';
 import 'AppPrefs.dart';
 import 'Screens/bottom_bar.dart';
 import 'Screens/splash_screen.dart';
-import 'Screens/splash_screen_2.dart';
+
+import 'api_interface/firebase_api.dart';
 import 'extra/audio_surah2/frontend/providers/app_provider.dart';
 import 'extra/audio_surah2/frontend/providers/chapter_list_provider.dart';
 import 'extra/audio_surah2/utils/route.dart';
@@ -24,6 +26,13 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseApi().initNotification();
+  // FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance; // Change here
+  // _firebaseMessaging.getToken().then((token){
+  //   print("token is $token");
+  //   tokenDevice=token!;
+  //
+  // });
 
   AwesomeNotifications().initialize(
     // 'resource://drawable/res_icon_100',
@@ -64,15 +73,12 @@ void main() async{
   });
 
   Get.put<GetStorage>(GetStorage());
-
-
   // FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance; // Change here
   // _firebaseMessaging.getToken().then((token){
   //   print("token is $token");
   //   tokenDevice=token;
   //
   // });
-
   runApp(
       MultiProvider(
         providers: [
@@ -91,9 +97,11 @@ class MyApp extends StatelessWidget {
     AppPrefs.setPhoneNumber('false');
 
     return GetMaterialApp(
+
       onGenerateRoute: (settings) => RouteGenerator.onGenerateRoute(settings),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+
         primarySwatch: Colors.blue,
       ),
 
@@ -104,10 +112,7 @@ class MyApp extends StatelessWidget {
       },
       getPages: [
         // Get.to(()=>LogoScreen());
-        GetPage(name: '/splashScreen', page: () => SplashScreen()),
-
-
-
+        GetPage(name: '/splash_screen', page: () => const SplashScreen()),
       ],
     );
   }

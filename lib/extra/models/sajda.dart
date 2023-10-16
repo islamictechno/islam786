@@ -1,12 +1,9 @@
 class SajdaList {
   final List<SajdaAyat> sajdaAyahs;
-
   SajdaList({required this.sajdaAyahs});
-
   factory SajdaList.fromJSON(Map<String, dynamic> json) {
     Iterable allSajdas = json['data']['ayahs'];
     List<SajdaAyat> sajdas = allSajdas.map((e) => SajdaAyat.fromJSON(e)).toList();
-
     return SajdaList(sajdaAyahs: sajdas);
   }
 }

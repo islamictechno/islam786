@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qiblah/flutter_qiblah.dart';
+import 'package:get/get.dart';
 import 'package:islamm786/qibla/qibla_compus.dart';
 
 import '../Constants.dart';
@@ -19,21 +20,22 @@ class _QiblaScreenState extends State<QiblaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: arabicColor,
         elevation: 0.3,
-        title: Text("Qibla Direction", style: TextStyle(color: blackColor, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Lato"),),
+        title: Text("Qibla Direction", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Lato"),),
         centerTitle: true,
         leading: GestureDetector(
-          child: Icon(Icons.arrow_back_ios, color: blackColor,),
+          child: Icon(Icons.arrow_back_ios, color: Colors.white,),
           onTap: (){
-            Navigator.pop(context);
+           Get.back();
           },
         ),
       ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(imageBackgroundLight),
+              colorFilter: ColorFilter.mode(arabicColor.withOpacity(0.3), BlendMode.dstATop),
+              image: AssetImage(imageBackgroundLight,),
               // opacity: 0.4,
               fit: BoxFit.cover),
         ),

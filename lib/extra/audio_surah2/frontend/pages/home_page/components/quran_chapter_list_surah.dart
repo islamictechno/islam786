@@ -23,7 +23,10 @@ class QuranChapterListBySurah extends StatelessWidget {
     return Consumer<ChapterListProvider>(
       builder: (context, value, child) {
         if (value.loading) {
-          return Container(
+
+          return
+
+            Container(
             height: 100,
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 3),
@@ -62,18 +65,20 @@ class QuranChapterListBySurah extends StatelessWidget {
               },
             ),
           );
+
         }
         if (value.errorOccurred) {
-          return Container(
-            child: Column(
-              children: [
-                Center(
-                  child: Text("${value.message}"),
-                ),
-                TextButton(onPressed: () => value.initialize(), child: Text("Retry"))
-              ],
-            ),
-          );
+          return Center(child: CircularProgressIndicator());
+          //   Container(
+          //   child: Column(
+          //     children: [
+          //       Center(
+          //         child: Text("${value.message}"),
+          //       ),
+          //       TextButton(onPressed: () => value.initialize(), child: Text("Retry"))
+          //     ],
+          //   ),
+          // );
         }
         return Container(
           height: 100,
@@ -85,7 +90,7 @@ class QuranChapterListBySurah extends StatelessWidget {
               return FadeInUp(
                 child: ListTile(
                   onTap: () =>
-                      Get.to(()=>ReadQuranPage(quranChapter: chapter)),
+                      Get.to(()=>ReadQuranPage(quranChapter:chapter)),
                       //Navigator.push(context, MaterialPageRoute(builder: (context)=>ReadQuranPage(quranChapter: chapter))),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                   leading: SizedBox(

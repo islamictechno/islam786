@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:islamm786/AppPrefs.dart';
 import 'package:islamm786/Constants.dart';
 import 'package:islamm786/Screens/tasbee_counter.dart';
@@ -238,8 +240,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         onPressed: () async{
                           SharedPreferences sp=await SharedPreferences.getInstance();
                         AppPrefs.setPhoneNumber('true');
-                          Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) => BottomBarNavigate()));
+                        Get.to(()=>BottomBarNavigate());
+                          // Navigator.push(context, MaterialPageRoute(
+                          //             builder: (context) => BottomBarNavigate()));
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

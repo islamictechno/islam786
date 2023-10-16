@@ -1,17 +1,23 @@
+import 'dart:io';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:islamm786/Constants.dart';
 import 'package:islamm786/Screens/NotePad/note_pad.dart';
 import 'package:islamm786/Screens/dua_screen.dart';
 import 'package:islamm786/Screens/home_screen.dart';
 import 'package:islamm786/Screens/lesson.dart';
+import 'package:islamm786/Screens/quran_page.dart';
 import 'package:islamm786/app_utils/common.dart';
+import 'package:islamm786/azkar_details/azkar.dart';
 
 import 'package:islamm786/extra/quran_screen.dart';
+import 'package:islamm786/main.dart';
 
 import 'more.dart';
 final List<Map <String, dynamic>>pageDetails=[
@@ -21,11 +27,12 @@ final List<Map <String, dynamic>>pageDetails=[
 
 },
   {
-    "pageName":Dua(),
+    "pageName":AzkarPage(),
 
   },
   {
-    "pageName":QuranScreen(),
+    "pageName":QuranPage(),
+    // "pageName":QuranScreen(),
 
   },
   {
@@ -78,13 +85,15 @@ class _BottomBarNavigateState extends State {
               actionsAlignment: MainAxisAlignment.spaceBetween,
               actions: [
                 TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
+                  onPressed:(){
+                    exit(0);
+                  Navigator.pop(context,true);
+            } ,
                   child: const Text('Yes'),
                 ),
                 TextButton(
                   onPressed: () {
+                    // exit(0);
                     Navigator.pop(context, false);
                   },
                   child: const Text('No'),
@@ -96,11 +105,8 @@ class _BottomBarNavigateState extends State {
         return shouldPop!;
       },
       // Get.put(MoveController());
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-
-        home: Scaffold(
-          backgroundColor: Color(0xFF75B7E1),
+      child:  Scaffold(
+          backgroundColor: Colors.white,
           extendBody: true,
           body:PageView(
             controller: _pageController,
@@ -139,33 +145,33 @@ class _BottomBarNavigateState extends State {
           bottomNavigationBar: CurvedNavigationBar(
 
             height: 50,
-            color: Color(0xff9662d6),
-            backgroundColor: Colors.white,
+            color: arabicColor,
+            backgroundColor: Colors.transparent,
             index: _activePageindex,
             key: _bottomNavigationKey,
             items: <Widget>[
 
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(2.0),
                 child: SvgPicture.asset('assets/bottom/home.svg',height: 20.0,width: 20.0,color: _activePageindex==0?Colors.white:Colors.white, ),
               ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset('assets/bottom/pray.svg',height: 20.0,width: 20.0, color: _activePageindex==3?Colors.white:Colors.white,)
+            padding: const EdgeInsets.all(0.0),
+            child: Image.asset('assets/DuaImage.png',height: 28.0,width: 28.0, color: _activePageindex==3?Colors.white:Colors.white,)
           ),
               Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: Image.asset("assets/icons8-quran-66.png", height: 25,width: 25,color: _activePageindex==2?Colors.white:Colors.white,)
 
                 // SvgPicture.asset('assets/bottom/quran.svg',height: 15.0,width: 15.0, ),
               ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(2.0),
             child: SvgPicture.asset('assets/bottom/madni.svg',height: 25.0,width: 25.0, color: _activePageindex==3?Colors.white:Colors.white,),
           ),
              Padding(
-               padding: const EdgeInsets.all(8.0),
-               child: Image.asset("assets/icons8-more-100.png", height: 30,width: 30,color: _activePageindex==2?Colors.white:Colors.white,),
+               padding: const EdgeInsets.all(0.0),
+               child: Image.asset("assets/bottom/menu-bar.png", height: 28,width: 28,color: _activePageindex==2?Colors.white:Colors.white,),
              ),
 
             ],
@@ -173,12 +179,8 @@ class _BottomBarNavigateState extends State {
               setState(() {
                 // index=_handleNavigationChange;
                 _pageController.animateToPage(
-
-                    index, duration: Duration(microseconds: 40), curve: Curves.ease
-
+                    index, duration: const Duration(microseconds: 40), curve: Curves.ease
                 );
-
-
               });
             },
           ),
@@ -231,7 +233,7 @@ class _BottomBarNavigateState extends State {
           //   ),
           // ),
         ),
-      ),
+
     );
   }
 

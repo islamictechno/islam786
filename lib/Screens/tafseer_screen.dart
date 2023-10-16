@@ -13,7 +13,7 @@ class Tafseer extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: whiteColor,
         elevation: 0.3,
-        title: Text("Tafseer", style: TextStyle(color: blackColor, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Lato"),),
+        title: const Text("Tafseer", style: TextStyle(color: blackColor, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Lato"),),
         centerTitle: true,
         leading: GestureDetector(
           child: Icon(Icons.arrow_back_ios, color: blackColor,),

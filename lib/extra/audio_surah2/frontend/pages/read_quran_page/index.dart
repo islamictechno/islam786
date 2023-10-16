@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:get/get.dart';
 
 import 'package:islamm786/Constants.dart';
+import 'package:islamm786/app_utils/text_utils.dart';
 import 'package:provider/provider.dart';
 
 
@@ -19,6 +21,7 @@ class ReadQuranPage extends StatelessWidget {
     keepScrollOffset: true, initialScrollOffset: 1.0
   );
   final QuranChapter quranChapter;
+  TextUtils _textUtils=TextUtils();
 
 
 
@@ -56,10 +59,14 @@ class ReadQuranPage extends StatelessWidget {
                               padding: EdgeInsets.all(0),
                               itemBuilder: (context, index) {
                                 return value.loading ?
-                                LoadingWidget(child: Container(
+                                LoadingWidget(
+
+                                    child:
+                                Container(
                                   margin: const EdgeInsets.symmetric(vertical: 10),
                                   padding: const EdgeInsets.fromLTRB(0,0,0,15),
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
+
                                       border: Border(
                                           bottom: BorderSide(color: arabicColor)
                                       )
@@ -67,12 +74,13 @@ class ReadQuranPage extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: arabicColor,
                                           borderRadius: BorderRadius.all(Radius.circular(10)),
                                         ),
                                         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                                         child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             CircleAvatar(
                                               radius: 15,
@@ -81,17 +89,26 @@ class ReadQuranPage extends StatelessWidget {
                                               ),),
                                               backgroundColor: MaterialColor(0xFF863ED5, colorMap).withOpacity(.5),
                                             ),
-                                            Expanded(
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  Icon(IconlyLight.send, color: arabicColor,),
-                                                  SizedBox(width: 10,),
-                                                  Icon(IconlyLight.play, color:  arabicColor,),
-                                                  SizedBox(width: 10,),
-                                                  Icon(IconlyLight.bookmark, color:  arabicColor,),
-                                                ],
+                                            Container(
+                                              height:30,
+                                              width: 50,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.black87,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(color: arabicColor)
                                               ),
+                                              child: Center(child: _textUtils.medium("Tafseer", arabicColor, 14.0, TextAlign.center)),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+
+                                                Icon(IconlyLight.send, color: arabicColor,),
+                                                SizedBox(width: 10,),
+                                                Icon(IconlyLight.play, color:  arabicColor,),
+                                                SizedBox(width: 10,),
+                                                Icon(IconlyLight.bookmark, color:  arabicColor,),
+                                              ],
                                             )
                                           ],
                                         ),
@@ -103,7 +120,7 @@ class ReadQuranPage extends StatelessWidget {
                                         ), textAlign: TextAlign.end,),
                                         alignment: Alignment.centerRight,
                                       ),
-                                      SizedBox(height: 15,),
+                                      const SizedBox(height: 15,),
                                       Container(
                                         child:Text('[All] praise is [due] to Allah, Lord of the worlds -', style: TextStyle(
                                             fontSize: 16, fontWeight: FontWeight.w400
@@ -117,7 +134,7 @@ class ReadQuranPage extends StatelessWidget {
                               },
                               itemCount: value.loading ? 1 : value.verses.length,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 40,
                             ),
                           ],
@@ -135,8 +152,9 @@ class ReadQuranPage extends StatelessWidget {
                             Row(
                               children: [
                                 InkWell(
-                                  child: Icon(IconlyBold.arrowLeft, color: Color(0xFF8789A3),),
-                                  onTap: () => Navigator.canPop(context),
+                                  child: const Icon(IconlyBold.arrowLeft,
+                                    color: Color(0xFF8789A3),),
+                                  onTap: () => Get.back(),
                                 ),
                                 SizedBox(width: 20,),
                                 Expanded(

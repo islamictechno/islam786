@@ -6,6 +6,7 @@ import 'package:flutter_qiblah/flutter_qiblah.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:islamm786/Constants.dart';
 
 import 'location_error_widget.dart';
 
@@ -92,7 +93,7 @@ class _QiblahCompassState extends State<QiblahCompass> {
 }
 
 class QiblahCompassWidget extends StatelessWidget {
-  static const mainAppColor = Color(0xFF0ec683);
+  static const mainAppColor = arabicColor;
   final _compassSvg = SvgPicture.asset(
     'assets/compass.svg',
     color: mainAppColor,

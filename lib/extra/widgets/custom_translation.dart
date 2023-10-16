@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:islamm786/Constants.dart';
+import 'package:islamm786/app_utils/text_utils.dart';
 
 import '../constants/constants.dart';
 import '../models/translation.dart';
@@ -9,6 +11,7 @@ class TranslationTile extends StatelessWidget {
   final SurahTranslation surahTranslation;
 
   TranslationTile({required this.index,required this.surahTranslation});
+  TextUtils _textUtils =TextUtils();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class TranslationTile extends StatelessWidget {
                   width: double.infinity,
                 ),
                 Positioned(
-                  top: 3,
+                  top: .5,
                   left: 12,
                   child: Container(
                     padding: EdgeInsets.all(6),
@@ -51,12 +54,68 @@ class TranslationTile extends StatelessWidget {
                         color: arabicColor
                     ),
                     child:
-                    SelectableText(
-                      surahTranslation.aya!,
-                      style: TextStyle(color: Colors.white,fontSize: 16,
-                          fontWeight: FontWeight.bold),
+                    Center(
+                      child: SelectableText(
+                        surahTranslation.aya!,
+                        style: TextStyle(color: Colors.white,fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
 
+                  ),
+                ),
+                Positioned(
+                  top: 3,
+                  right: 8,
+                  child: InkWell(
+                    onTap:(){
+                      Fluttertoast.showToast(
+                          msg: "Coming Soon",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.white,
+                          textColor: Colors.purple.shade900,
+                          fontSize: 16.0
+                      );
+                    },
+                    child: Container(
+                      height:22,
+                      width: 50,
+                      decoration: BoxDecoration(
+
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: arabicColor)
+                      ),
+                      child: Center(child: _textUtils.normal("Tafseer", arabicColor, 10.0, TextAlign.center)),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 3,
+                  right: 64,
+                  child: InkWell(
+                    onTap:(){
+                      Fluttertoast.showToast(
+                          msg: "Coming Soon",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.white,
+                          textColor: Colors.purple.shade900,
+                          fontSize: 16.0
+                      );
+                    },
+                    child: Container(
+                      height:22,
+                      width: 50,
+                      decoration: BoxDecoration(
+
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: arabicColor)
+                      ),
+                      child: Center(child: _textUtils.normal("Translation", arabicColor, 8.0, TextAlign.center)),
+                    ),
                   ),
                 ),
               ],
@@ -77,7 +136,6 @@ class TranslationTile extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: "Noorehira",
                           color: arabicColor,
-
                           fontSize: 20),
                     ),
 

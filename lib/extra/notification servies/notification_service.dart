@@ -21,11 +21,14 @@ class AwesomeNotify {
       return await AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: id,
-          channelKey: "Namaz Time",
+          channelKey: "Islam786",
           title: title,
           body: body,
           wakeUpScreen: true,
           bigPicture: "asset://$illPray",
+          // customSound:"assets/audio/azan1.mp3",
+          // category: NotificationCategory.Reminder,
+          // criticalAlert: true,
           notificationLayout: NotificationLayout.BigPicture,
           // fullScreenIntent: true,
           // displayOnBackground: true,
@@ -55,24 +58,26 @@ class AwesomeNotify {
       return await AwesomeNotifications().createNotification(
         content: NotificationContent(
           id: id,
-          channelKey: "Namaz Time",
+          channelKey: "Islam786",
           title: title,
           body: body,
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: "asset://$illPray",
           wakeUpScreen: true,
+          // customSound: "assets/audio/azan1.mp3",
+
           category: NotificationCategory.Reminder,
           criticalAlert: true,
           fullScreenIntent: (minute == 0) ? true : false,
           // displayOnBackground: true,
-          // displayOnForeground: true,
+          displayOnForeground: true,
         ),
         actionButtons: (minute == 0)
             ? [
                 NotificationActionButton(
                   key: "mark_done",
                   label: "Mark Done",
-                )
+                ),
               ]
             : null,
         schedule: NotificationCalendar(

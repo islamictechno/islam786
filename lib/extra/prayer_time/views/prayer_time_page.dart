@@ -8,6 +8,7 @@ import 'package:group_button/group_button.dart';
 import 'package:islamm786/Constants.dart';
 
 
+import '../../../prayer_time_notification/prayer_time_notifocation.dart';
 import '../../alaram/app/modules/views/alarm_page.dart';
 import '../../notification servies/notification_service.dart';
 import '../controllers/prayer_time_controller.dart';
@@ -26,12 +27,45 @@ class PrayerTimePage extends StatelessWidget {
   final prayerTimeNotifC = Get.put(PrayerTimeNotifController());
 
   final groupBtnController = GroupButtonController(
-      // selectedIndex: 0,
+      selectedIndex: 0,
       );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar:  Padding(
+        padding: const EdgeInsets.only(
+            top:15,left: 20.0,right: 20,bottom: 20),
+        child: Container(
+          height: 45,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: arabicColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child:  InkWell(
+            onTap: (){
+              Get.to(()=>AlarmPage());
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder:
+              //         (context)=>AlarmPage()));
+            },
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.alarm,color: Colors.white,size: 15,),
+                SizedBox(width: 3,),
+                Text("Add Alarm",style: TextStyle(
+                  fontSize: 15,color: Colors.white,
+                ),),
+
+              ],
+            ),
+          ),
+        ),
+      ),
+
       // key: _key,
       // drawer: AppDrawer(),
       appBar: AppBar(
@@ -39,23 +73,32 @@ class PrayerTimePage extends StatelessWidget {
         title: Text(
 
           "Prayer Times",
+          style: TextStyle(color: Colors.white,fontSize: 18),
 
         ),
+        leading: InkWell(
+          onTap: (){
+            Get.back();
+          },
+          child: Icon(
+            Icons.arrow_back_ios,size: 18,color: Colors.white,
+          ),
+        ),
 
-        actions: [
-
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              onPressed:(){
-                Navigator.push(context,
-                    MaterialPageRoute(builder:
-                        (context)=>AlarmPage()));
-              },
-              icon:Icon(Icons.alarm,color: Colors.white,)
-              ),
-          )
-        ],
+        // actions: [
+        //
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: IconButton(
+        //       onPressed:(){
+        //         Navigator.push(context,
+        //             MaterialPageRoute(builder:
+        //                 (context)=>AlarmPage()));
+        //       },
+        //       icon:Icon(Icons.alarm,color: Colors.white,)
+        //       ),
+        //   )
+        // ],
         // leading: IconButton(
         //   onPressed: () => _key.currentState!.openDrawer(),
         //   icon: const Icon(
@@ -88,12 +131,9 @@ class PrayerTimePage extends StatelessWidget {
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
         child: Obx(() {
           return prayerTimeC.isLoadLocation.value
-              ? const SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: PrayerTimePageShimmer(),
-                )
+              ? PrayerTimePageShimmer()
               : SizedBox(
-                  height: MediaQuery.of(context).size.height,
+                  height: 650,
                   width: MediaQuery.of(context).size.width,
                   child: ListView(
                     padding: const EdgeInsets.symmetric(
@@ -148,13 +188,25 @@ class PrayerTimePage extends StatelessWidget {
                           "Qiyam",
                         ];
 
-                        return FadeInDown(
-                          from: 40,
-                          child: AppCard(
-                            color: buttonColor.withOpacity(0.1),
-                            hMargin: 0,
-                            child: SizedBox(
-                              height: 432,
+                        return Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(15),
+                              decoration:  BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+
+                                image: const DecorationImage(
+                                  opacity: 0.34,
+                                  // colorFilter:
+                                  // ColorFilter.mode(Colors.white.withOpacity(0.2),
+                                  //     BlendMode.dstATop),
+                                  image: AssetImage(
+                                    "assets/check.png",
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              height: 460,
                               width: MediaQuery.of(context).size.width,
                               child: ListView.separated(
                                 physics: const NeverScrollableScrollPhysics(),
@@ -182,7 +234,7 @@ class PrayerTimePage extends StatelessWidget {
                                       ),
                                       const Spacer(),
                                       Text(
-                                        "${prayerTimes[i]?.day.toString().padLeft(2, '0') ?? "--"}/${prayerTimes[i]?.month.toString().padLeft(2, '0') ?? "--"}/${prayerTimes[i]?.year ?? "--"}",
+                                        "${prayerTimes[i]?.year ?? "--"}/${prayerTimes[i]?.month.toString().padLeft(2, '0') ?? "--"}/${prayerTimes[i]?.day.toString().padLeft(2, '0') ?? "--"}",
                                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(width: 8),
@@ -208,14 +260,15 @@ class PrayerTimePage extends StatelessWidget {
                                                   prayerTimeNotifC.writeBox(
                                                     key: 'fajr_notif',
                                                     value: prayerTimeNotifC
-                                                        .enableFajr.value
-                                                        .toString(),
+                                                        .enableFajr.value.toString()
+                                                        ,
                                                   );
                                                 });
                                               } else {
                                                 showSetPrayerTime(
                                                   prayerTime: prayerTimes[0]!,
                                                   prayerName: prayerNames[0],
+
                                                 );
                                               }
 
@@ -403,7 +456,7 @@ class PrayerTimePage extends StatelessWidget {
                                                   .notifications_off_outlined,
                                           color: enableNotif[i]
                                               ? Colors.black
-                                              : Colors.grey,
+                                              : Colors.white,
                                         ),
                                       )
                                     ],
@@ -415,7 +468,7 @@ class PrayerTimePage extends StatelessWidget {
                                 itemCount: prayerTimes.length,
                               ),
                             ),
-                          ),
+                          ],
                         );
                       }),
                     ],
@@ -434,7 +487,7 @@ class PrayerTimePage extends StatelessWidget {
 
   void showSetPrayerTime(
       {required DateTime prayerTime, required String prayerName}) {
-    int? hour, minute;
+    int? hour,minute;
 
     log(prayerName);
 
@@ -443,7 +496,6 @@ class PrayerTimePage extends StatelessWidget {
         controller: groupBtnController,
         onSelected: (value, index, selected) {
           debugPrint("$value $index $selected");
-
           switch (index) {
             case 0:
               hour = 0;
@@ -465,12 +517,22 @@ class PrayerTimePage extends StatelessWidget {
               hour = 0;
               minute = 1200; // in second
               break;
-
             default:
           }
         },
-        onPressed: () {
-          activeScheduleNotification(hour, minute, prayerTime, prayerName);
+        onPressed: () async{
+
+
+          Get.snackbar(
+            'Prayer reminder',
+            'Your prayer reminder has been created',
+            snackPosition: SnackPosition.TOP,
+            icon: const Icon(Icons.mosque),
+          );
+          //NotificationService().backgroundTask();
+
+            activeScheduleNotification(hour,minute,prayerTime,prayerName);
+
         },
       ),
     );
@@ -480,7 +542,6 @@ class PrayerTimePage extends StatelessWidget {
       int? hour, int? minute, DateTime prayerTime, String prayerName) {
     if (hour != null || minute != null) {
       log("ACTIVE SCHEDULE ${prayerName.toUpperCase()}");
-
       prayerTimeNotifC.createPrayerTimeReminder(
         prayerTime: prayerName,
         dateTime: prayerTime,
@@ -490,8 +551,8 @@ class PrayerTimePage extends StatelessWidget {
 
       if (prayerName == 'Fajr') {
         // Change notif icon
-        prayerTimeNotifC.enableFajr.value = !prayerTimeNotifC.enableFajr.value;
 
+        prayerTimeNotifC.enableFajr.value = !prayerTimeNotifC.enableFajr.value;
         // save to local db
         prayerTimeNotifC.writeBox(
           key: 'fajr_notif',
@@ -501,16 +562,14 @@ class PrayerTimePage extends StatelessWidget {
         // Change notif icon
         prayerTimeNotifC.enableSunrise.value =
             !prayerTimeNotifC.enableSunrise.value;
-
         prayerTimeNotifC.writeBox(
           key: 'sunrise_notif',
           value: prayerTimeNotifC.enableSunrise.value.toString(),
         );
-      } else if (prayerName == 'Dhuhr') {
+      } else if (prayerName == 'Dhuhr'){
         // Change notif icon
         prayerTimeNotifC.enableDhuhr.value =
             !prayerTimeNotifC.enableDhuhr.value;
-
         prayerTimeNotifC.writeBox(
           key: 'dhuhr_notif',
           value: prayerTimeNotifC.enableDhuhr.value.toString(),
@@ -518,7 +577,8 @@ class PrayerTimePage extends StatelessWidget {
       } else if (prayerName == 'Asr') {
         // Change notif icon
         prayerTimeNotifC.enableAsr.value = !prayerTimeNotifC.enableAsr.value;
-
+        print("Aser Value");
+        print( prayerTimeNotifC.enableAsr.value);
         prayerTimeNotifC.writeBox(
           key: 'asr_notif',
           value: prayerTimeNotifC.enableAsr.value.toString(),
@@ -527,7 +587,6 @@ class PrayerTimePage extends StatelessWidget {
         // Change notif icon
         prayerTimeNotifC.enableMaghrib.value =
             !prayerTimeNotifC.enableMaghrib.value;
-
         prayerTimeNotifC.writeBox(
           key: 'maghrib_notif',
           value: prayerTimeNotifC.enableMaghrib.value.toString(),
@@ -535,7 +594,6 @@ class PrayerTimePage extends StatelessWidget {
       } else if (prayerName == 'Isha') {
         // Change notif icon
         prayerTimeNotifC.enableIsha.value = !prayerTimeNotifC.enableIsha.value;
-
         prayerTimeNotifC.writeBox(
           key: 'isha_notif',
           value: prayerTimeNotifC.enableIsha.value.toString(),

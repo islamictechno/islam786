@@ -39,7 +39,7 @@ class QuranServiceApi implements QuranService {
   }
 
   @override
-  Future<List<ChapterVerse>> getVersesByChapter(int chapterId, {String language = 'en', bool word = true}) async {
+  Future<List<ChapterVerse>> getVersesByChapter(int chapterId, {String language = 'ur', bool word = true}) async {
     ApiResponse response = await _apiService.makeGetRequest(GET_VERSES_BY_CHAPTER_ENDPOINT+'$chapterId?words=$word&language=$language&audio=1&per_page=50&fields=text_uthmani');
     return List.from(response.data['verses']).map((e) => ChapterVerse.fromJson(e)).toList();
   }

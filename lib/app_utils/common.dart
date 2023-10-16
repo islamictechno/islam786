@@ -1,6 +1,9 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+
+import '../Constants.dart';
 
 class Common{
   static String fontFamily = "Uthmani";
@@ -39,4 +42,10 @@ class MoveController extends GetxController{
     update();
   }
 
+}
+ComingSoon(height,width){
+  return SizedBox(
+      height: height,
+      width: width,
+      child: const Center(child: Text("Coming in March",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700,color: black),)));
 }

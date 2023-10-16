@@ -22,8 +22,8 @@ class RouteGenerator {
       case HOME_PAGE_SCREEN_ROUTE:
         return MaterialPageRoute(builder: (context) => HomePageScreen(),);
       case INITIAL_ROUTE:
-        return MaterialPageRoute(builder: (context) => ReadQuranPage(quranChapter: arguments as QuranChapter,),);
-
+        //return MaterialPageRoute(builder: (context) => ReadQuranPage(quranChapter: arguments as QuranChapter,),);
+        return MaterialPageRoute(builder: (context) => HomePageScreen(),);
       default:
         return MaterialPageRoute(builder: (context) => Container());
     }

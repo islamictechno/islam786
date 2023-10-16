@@ -73,7 +73,7 @@ class PrayerTimeNotifController extends GetxController {
   }
 
   void createPrayerTimeReminder({
-    required String prayerTime,
+     required String prayerTime,
     required DateTime dateTime,
     required int hour,
     required int minute,
@@ -84,10 +84,13 @@ class PrayerTimeNotifController extends GetxController {
     log("ID : " + uniqueId.toString());
     log("DateTime : " + dateTime.toString());
 
+
+
     AwesomeNotify.createScheduleNotif(
+
       id: uniqueId,
       title: "Prayer Times Reminder",
-      body: minute != 0
+      body: minute == 0
           ? "${prayerTime.capitalize} prayer time is coming soon in ${Duration(seconds: minute).inMinutes} minutes, let's get ready 🤩"
           : "${prayerTime.capitalize} prayer time has arrived, let's do the prayer 🚀",
       dateTime: dateTime,
@@ -101,11 +104,14 @@ class PrayerTimeNotifController extends GetxController {
             title: "Allow Notifications",
             message: "Our app would like to send you notifications.",
             onPressed: () {
+
               AwesomeNotifications()
                   .requestPermissionToSendNotifications()
                   .then(
-                (isAllowed) {
+                    (isAllowed) {
                   if (isAllowed == true) {
+                    print("Notification Allowed:");
+                    print(isAllowed);
                     Get.back();
                   } else {
                     Get.snackbar("Opps", "Notification unallowed");
@@ -126,7 +132,6 @@ class PrayerTimeNotifController extends GetxController {
     final a = box.read(key);
     log("VALUE " + a);
   }
-
   bool readBox({required String key}) {
     final box = Get.find<GetStorage>();
     final value = box.read(key);
@@ -166,7 +171,7 @@ class PrayerTimeNotifController extends GetxController {
                   .requestPermissionToSendNotifications()
                   .then(
                     (value) => Get.back(),
-                  );
+              );
             },
           ),
         );
@@ -175,8 +180,8 @@ class PrayerTimeNotifController extends GetxController {
 
     // AwesomeNotifications().createdStream.listen((notification) {
     //   Get.snackbar("Wooho", 'Notifications enabled.');
-      // on ${notification.channelKey}');
-      // AwesomeNotifications().s;
+    // on ${notification.channelKey}');
+    // AwesomeNotifications().s;
     // });
 
 

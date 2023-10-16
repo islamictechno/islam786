@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:islamm786/Constants.dart';
 import 'package:islamm786/app_utils/text_utils.dart';
 
 class AboutUsScreen extends StatefulWidget {
@@ -38,16 +40,20 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Color(0xff9662d6),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 95.0),
-          child: Text("About Us",
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: AppBar(
+          elevation: 0.0,
+          leading: InkWell(onTap: (){
+            Get.back();},
+              child: Icon(Icons.arrow_back_ios,size: 15,color: Colors.white,)),
+          backgroundColor: arabicColor,
+          title: Text("About Us",
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: Colors.white)),
+          centerTitle: true,
         ),
       ),
       backgroundColor: Colors.white,
@@ -88,11 +94,11 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                   height: 10,
                 ),
                 _textUtils.bold(
-                    "Our Mission", Color(0xff9662d6), 17.0, TextAlign.start),
+                    "Our Mission", arabicColor, 17.0, TextAlign.start),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium("Quranic Resources: ",
-                      Color(0xff9662d6), 15.0, TextAlign.start),
+                      arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
@@ -108,7 +114,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium("Hadith Collections: ",
-                      Color(0xff9662d6), 15.0, TextAlign.start),
+                      arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
@@ -125,7 +131,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium("Prayer Times and Qibla Direction:",
-                      Color(0xff9662d6), 15.0, TextAlign.start),
+                      arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
@@ -141,7 +147,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium("Islamic Articles and Videos:",
-                      Color(0xff9662d6), 15.0, TextAlign.start),
+                      arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
@@ -157,7 +163,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium("Dua and Supplication:",
-                      Color(0xff9662d6), 15.0, TextAlign.start),
+                      arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
@@ -173,7 +179,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium("Community and Engagement:",
-                      Color(0xff9662d6), 15.0, TextAlign.start),
+                      arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
@@ -190,7 +196,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                   height: 10,
                 ),
                 _textUtils.bold(
-                    "Our Commitment", Color(0xff9662d6), 17.0, TextAlign.start),
+                    "Our Commitment",arabicColor, 17.0, TextAlign.start),
                 _textUtils.normal(
                     "At Islam786, we are committed to the following principles:",
                     Colors.black,
@@ -199,7 +205,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                     maxLines: 4),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: _textUtils.medium("Authenticity:", Color(0xff9662d6),
+                  child: _textUtils.medium("Authenticity:", arabicColor,
                       15.0, TextAlign.start),
                 ),
                 Padding(
@@ -218,7 +224,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium(
-                      "Inclusivity:", Color(0xff9662d6), 15.0, TextAlign.start),
+                      "Inclusivity:", arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
@@ -232,7 +238,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: _textUtils.medium("Accessibility:", Color(0xff9662d6),
+                  child: _textUtils.medium("Accessibility:",arabicColor,
                       15.0, TextAlign.start),
                 ),
                 Padding(
@@ -249,7 +255,7 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: _textUtils.medium("Continuous Improvement:",
-                      Color(0xff9662d6), 15.0, TextAlign.start),
+                      arabicColor, 15.0, TextAlign.start),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),

@@ -16,15 +16,12 @@ class ApiServices{
 
   final endPointUrl ="http://api.alquran.cloud/v1/surah";
   List<Surah> list = [];
-
   Future<AyaOfTheDay> getAyaOfTheDay() async {
-
     // for random Aya we need to generate random number
     // (1,6237) from 1 to 6236
     // Random Aya
-    String url = "https://api.alquran.cloud/v1/ayah/${random(1,6237)}/editions/quran-uthmani,en.asad,en.pickthall";
+    String url = "https://api.alquran.cloud/v1/ayah/${random(1,6237)}/edition/ur.qadri,ur.qadri";
     final response = await http.get(Uri.parse(url));
-
     if (response.statusCode == 200) {
         return AyaOfTheDay.fromJSON(json.decode(response.body));
     } else {
@@ -77,9 +74,7 @@ class ApiServices{
       throw Exception("Failed  to Load Post");
     }
   }
-
   Future<SurahTranslationList> getTranslation(int index , int translationIndex) async{
-
     String lan = "";
      if(translationIndex == 0){
       lan = "hindi_omari";
@@ -87,25 +82,21 @@ class ApiServices{
       lan = "english_saheeh";
     }else if(translationIndex == 2){
       lan = "spanish_garcia";
-    }
-
+    } else if(translationIndex == 2){
+       lan = "urdu_junagarhi";
+     }
     final url = "https://quranenc.com/api/translation/sura/$lan/$index";
     var res = await http.get(Uri.parse(url));
-
     return SurahTranslationList.fromJson(json.decode(res.body));
   }
-
-
   List<Qari> qarilist = [];
-
   Future<List<Qari>> getQariList() async {
-
     final url = "https://quranicaudio.com/api/qaris";
     final res = await http.get(Uri.parse(url));
-
     jsonDecode(res.body).forEach((element){
-      if(qarilist.length<100) // 20 is not mandatory , you can change it upto 157
+      if(qarilist.length<25){// 20 is not mandatory , you can change it upto 157
         qarilist.add(Qari.fromjson(element));
+      }
     });
     qarilist.sort((a,b)=>a.name!.compareTo(b.name!)); // sort according to A B C
     return qarilist;
